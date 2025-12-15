@@ -484,7 +484,7 @@ const HabitTrackerGame = () => {
   const daysInMonth = getDaysInMonth(currentMonth);
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
+    <div className="min-h-screen bg-blue-950 p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-6 border border-white/20">
