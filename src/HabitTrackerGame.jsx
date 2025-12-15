@@ -10,12 +10,104 @@ import {
   Loader2,
   LogOut,
   Lock,
+  Globe,
 } from "lucide-react";
-import Ballpit from "./Ballpit";
+import Galaxy from "./Galaxy";
 
 const HabitTrackerGame = () => {
-  const VALID_CODES = ["Mustafo", "Oyatilloh", "Ismoil"];
+  // Login kodlari - bu yerga o'z kodlaringizni qo'shing
+  const VALID_CODES = ["Ismoil", "Mustafo", "Oyatilloh"];
 
+  // Translations
+  const translations = {
+    uz: {
+      title: "Hayotingizni O'zgartiring",
+      loginTitle: "Habit Tracker",
+      loginSubtitle: "Kirish uchun kodingizni kiriting",
+      loginPlaceholder: "Kirish kodi",
+      loginButton: "Kirish",
+      loginError: "Noto'g'ri kod! Qaytadan urinib ko'ring.",
+      noCode: "💡 Kod yo'qmi? Administrator bilan bog'laning",
+      myHabits: "Mening Odatlarim",
+      addHabit: "Qo'shish",
+      newHabitPlaceholder: "Yangi odat nomi...",
+      user: "Foydalanuvchi",
+      completed: "bajarildi",
+      level: "level",
+      loading: "Ma'lumotlar yuklanmoqda...",
+      saving: "Saqlanmoqda...",
+      reset: "Reset",
+      logout: "Chiqish",
+      logoutConfirm: "Haqiqatan ham chiqmoqchimisiz?",
+      resetConfirm:
+        "Barcha ma'lumotlarni o'chirmoqchimisiz? Bu amalni bekor qilib bo'lmaydi!",
+      resetSuccess: "Ma'lumotlar muvaffaqiyatli o'chirildi!",
+      error: "Xatolik yuz berdi",
+      saveError: "Ma'lumotlarni saqlashda xatolik yuz berdi",
+      infoMessage: "💾 Sizning shaxsiy ma'lumotlaringiz xavfsiz.",
+      days: "kun",
+      habit: "Odat",
+      weekDays: ["Ya", "Du", "Se", "Cho", "Pa", "Ju", "Sh", "Ya"],
+    },
+    ru: {
+      title: "Измените свою жизнь",
+      loginTitle: "Habit Tracker",
+      loginSubtitle: "Введите код для входа",
+      loginPlaceholder: "Код входа",
+      loginButton: "Войти",
+      loginError: "Неверный код! Попробуйте еще раз.",
+      noCode: "💡 Нет кода? Свяжитесь с администратором",
+      myHabits: "Мои привычки",
+      addHabit: "Добавить",
+      newHabitPlaceholder: "Название новой привычки...",
+      user: "Пользователь",
+      completed: "выполнено",
+      level: "уровень",
+      loading: "Загрузка данных...",
+      saving: "Сохранение...",
+      reset: "Сброс",
+      logout: "Выход",
+      logoutConfirm: "Вы действительно хотите выйти?",
+      resetConfirm: "Удалить все данные? Это действие нельзя отменить!",
+      resetSuccess: "Данные успешно удалены!",
+      error: "Произошла ошибка",
+      saveError: "Ошибка при сохранении данных",
+      infoMessage: "💾 Ваши личные данные в безопасности.",
+      days: "дней",
+      habit: "Привычка",
+      weekDays: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+    },
+    en: {
+      title: "Change your life",
+      loginTitle: "Habit Tracker",
+      loginSubtitle: "Enter your code to login",
+      loginPlaceholder: "Login code",
+      loginButton: "Login",
+      loginError: "Wrong code! Try again.",
+      noCode: "💡 Don't have a code? Contact administrator",
+      myHabits: "My Habits",
+      addHabit: "Add",
+      newHabitPlaceholder: "New habit name...",
+      user: "User",
+      completed: "completed",
+      level: "level",
+      loading: "Loading data...",
+      saving: "Saving...",
+      reset: "Reset",
+      logout: "Logout",
+      logoutConfirm: "Are you sure you want to logout?",
+      resetConfirm: "Delete all data? This action cannot be undone!",
+      resetSuccess: "Data successfully deleted!",
+      error: "An error occurred",
+      saveError: "Error saving data",
+      infoMessage: "💾 Your personal data is secure.",
+      days: "days",
+      habit: "Habit",
+      weekDays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    },
+  };
+
+  const [language, setLanguage] = useState("uz");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginCode, setLoginCode] = useState("");
   const [loginError, setLoginError] = useState("");
@@ -30,8 +122,15 @@ const HabitTrackerGame = () => {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
 
+  const t = translations[language];
+
+  // Check if user is logged in on mount
   useEffect(() => {
-    const savedUser = localStorage.getItem("currentUser");
+    const savedUser = sessionStorage.getItem("currentUser");
+    const savedLanguage = sessionStorage.getItem("language");
+    if (savedLanguage) {
+      setLanguage(savedLanguage);
+    }
     if (savedUser && VALID_CODES.includes(savedUser)) {
       setCurrentUser(savedUser);
       setIsLoggedIn(true);
@@ -39,26 +138,31 @@ const HabitTrackerGame = () => {
     }
   }, []);
 
+  const changeLanguage = (lang) => {
+    setLanguage(lang);
+    sessionStorage.setItem("language", lang);
+  };
+
   const handleLogin = () => {
     const code = loginCode.trim();
 
     if (VALID_CODES.includes(code)) {
       setCurrentUser(code);
       setIsLoggedIn(true);
-      localStorage.setItem("currentUser", code);
+      sessionStorage.setItem("currentUser", code);
       loadData(code);
       setLoginError("");
       setLoginCode("");
     } else {
-      setLoginError("Noto'g'ri kod! Qaytadan urinib ko'ring.");
+      setLoginError(t.loginError);
     }
   };
 
   const handleLogout = () => {
-    if (confirm("Haqiqatan ham chiqmoqchimisiz?")) {
+    if (confirm(t.logoutConfirm)) {
       setIsLoggedIn(false);
       setCurrentUser("");
-      localStorage.removeItem("currentUser");
+      sessionStorage.removeItem("currentUser");
       setHabits([]);
       setCompletions({});
     }
@@ -68,35 +172,30 @@ const HabitTrackerGame = () => {
     try {
       setLoading(true);
 
+      // Load habits for this user
       const habitsKey = `habits_${userCode}`;
-      const completionsKey = `completions_${userCode}`;
-
-      const habitsData = localStorage.getItem(habitsKey);
-      if (habitsData) {
-        setHabits(JSON.parse(habitsData));
+      const habitsResult = await window.storage.get(habitsKey);
+      if (habitsResult && habitsResult.value) {
+        setHabits(JSON.parse(habitsResult.value));
       } else {
+        // Default habits if none exist
         const defaultHabits = [
           {
             id: 1,
-            name: "Erta tur 05:00",
+            name: "Wake up at 05:00",
             emoji: "⏰",
             color: "bg-cyan-100",
           },
-          {
-            id: 2,
-            name: "Sport bilan shug'ullan",
-            emoji: "💪",
-            color: "bg-cyan-100",
-          },
+          { id: 2, name: "Gym", emoji: "💪", color: "bg-cyan-100" },
           {
             id: 3,
-            name: "Behayo videolardan saqlan",
+            name: "Stop Watching Porn",
             emoji: "💧",
             color: "bg-cyan-100",
           },
           {
             id: 4,
-            name: "Kitob o'qish",
+            name: "Reading / Learning",
             emoji: "📚",
             color: "bg-cyan-100",
           },
@@ -113,17 +212,45 @@ const HabitTrackerGame = () => {
           { id: 10, name: "Cold Shower", emoji: "🚿", color: "bg-cyan-100" },
         ];
         setHabits(defaultHabits);
-        localStorage.setItem(habitsKey, JSON.stringify(defaultHabits));
+        await window.storage.set(habitsKey, JSON.stringify(defaultHabits));
       }
 
-      const completionsData = localStorage.getItem(completionsKey);
-      if (completionsData) {
-        setCompletions(JSON.parse(completionsData));
-      } else {
-        setCompletions({});
+      // Load completions for this user
+      const completionsKey = `completions_${userCode}`;
+      const completionsResult = await window.storage.get(completionsKey);
+      if (completionsResult && completionsResult.value) {
+        setCompletions(JSON.parse(completionsResult.value));
       }
     } catch (error) {
-      console.error("Ma'lumotlarni yuklashda xatolik:", error);
+      console.error("Error loading data:", error);
+      const defaultHabits = [
+        { id: 1, name: "Wake up at 05:00", emoji: "⏰", color: "bg-cyan-100" },
+        { id: 2, name: "Gym", emoji: "💪", color: "bg-cyan-100" },
+        {
+          id: 3,
+          name: "Stop Watching Porn",
+          emoji: "💧",
+          color: "bg-cyan-100",
+        },
+        {
+          id: 4,
+          name: "Reading / Learning",
+          emoji: "📚",
+          color: "bg-cyan-100",
+        },
+        { id: 5, name: "Budget Tracking", emoji: "💰", color: "bg-cyan-100" },
+        { id: 6, name: "Project Work", emoji: "🎯", color: "bg-cyan-100" },
+        { id: 7, name: "No Alcohol", emoji: "🥤", color: "bg-cyan-100" },
+        {
+          id: 8,
+          name: "Social Media Detox",
+          emoji: "🌿",
+          color: "bg-cyan-100",
+        },
+        { id: 9, name: "Goal Journaling", emoji: "📝", color: "bg-cyan-100" },
+        { id: 10, name: "Cold Shower", emoji: "🚿", color: "bg-cyan-100" },
+      ];
+      setHabits(defaultHabits);
     } finally {
       setLoading(false);
     }
@@ -133,11 +260,11 @@ const HabitTrackerGame = () => {
     try {
       setSaving(true);
       const habitsKey = `habits_${currentUser}`;
-      localStorage.setItem(habitsKey, JSON.stringify(newHabits));
+      await window.storage.set(habitsKey, JSON.stringify(newHabits));
       setHabits(newHabits);
     } catch (error) {
-      console.error("Odatlarni saqlashda xatolik:", error);
-      alert("Ma'lumotlarni saqlashda xatolik yuz berdi");
+      console.error("Error saving habits:", error);
+      alert(t.saveError);
     } finally {
       setSaving(false);
     }
@@ -147,11 +274,11 @@ const HabitTrackerGame = () => {
     try {
       setSaving(true);
       const completionsKey = `completions_${currentUser}`;
-      localStorage.setItem(completionsKey, JSON.stringify(newCompletions));
+      await window.storage.set(completionsKey, JSON.stringify(newCompletions));
       setCompletions(newCompletions);
     } catch (error) {
-      console.error("Completions ni saqlashda xatolik:", error);
-      alert("Ma'lumotlarni saqlashda xatolik yuz berdi");
+      console.error("Error saving completions:", error);
+      alert(t.saveError);
     } finally {
       setSaving(false);
     }
@@ -228,22 +355,17 @@ const HabitTrackerGame = () => {
   };
 
   const resetAllData = async () => {
-    if (
-      confirm(
-        "Barcha ma'lumotlarni o'chirmoqchimisiz? Bu amalni bekor qilib bo'lmaydi!"
-      )
-    ) {
+    if (confirm(t.resetConfirm)) {
       try {
         const habitsKey = `habits_${currentUser}`;
         const completionsKey = `completions_${currentUser}`;
-
-        localStorage.removeItem(habitsKey);
-        localStorage.removeItem(completionsKey);
-
+        await window.storage.delete(habitsKey);
+        await window.storage.delete(completionsKey);
         await loadData(currentUser);
+        alert(t.resetSuccess);
       } catch (error) {
-        console.error("Ma'lumotlarni o'chirishda xatolik:", error);
-        alert("Xatolik yuz berdi");
+        console.error("Error deleting data:", error);
+        alert(t.error);
       }
     }
   };
@@ -252,31 +374,58 @@ const HabitTrackerGame = () => {
   if (!isLoggedIn) {
     return (
       <div
-        className="bg-black/50 flex items-center h-screen w-full justify-center z-50"
+        className="flex items-center justify-center bg-black"
         style={{
-          position: "relative",
-          overflow: "hidden",
           width: "100%",
+          height: "100vh",
+          background: "rgb(0, 0, 20)",
+          position: "fixed",
         }}
       >
-        <Ballpit
-          count={150}
-          gravity={1}
-          friction={0.9}
-          wallBounce={0.95}
-          followCursor={false}
-        />
+        <Galaxy />
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="bg-white/10 absolute  backdrop-blur-lg rounded-3xl p-8 border border-white/20 max-w-md w-full">
+            <div className="flex justify-center gap-2 mb-6">
+              <button
+                onClick={() => changeLanguage("uz")}
+                className={`px-4 py-2 rounded-lg font-medium transition ${
+                  language === "uz"
+                    ? "bg-purple-500 text-white"
+                    : "bg-white/10 text-white/70 hover:bg-white/20"
+                }`}
+              >
+                O'zbek
+              </button>
+              <button
+                onClick={() => changeLanguage("ru")}
+                className={`px-4 py-2 rounded-lg font-medium transition ${
+                  language === "ru"
+                    ? "bg-purple-500 text-white"
+                    : "bg-white/10 text-white/70 hover:bg-white/20"
+                }`}
+              >
+                Русский
+              </button>
+              <button
+                onClick={() => changeLanguage("en")}
+                className={`px-4 py-2 rounded-lg font-medium transition ${
+                  language === "en"
+                    ? "bg-purple-500 text-white"
+                    : "bg-white/10 text-white/70 hover:bg-white/20"
+                }`}
+              >
+                English
+              </button>
+            </div>
 
-        <div className="min-h-screen flex items-center justify-center top-0 right-0 left-0 absolute p-4">
-          <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 max-w-md w-full">
             <div className="text-center mb-8">
-              <div className="bg-blue-500/20 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Lock className="w-10 h-10 text-white" />
+              <div className="bg-purple-500/20 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Lock className="w-10 h-10 text-purple-300" />
               </div>
               <h1 className="text-3xl font-bold text-white mb-2">
-                Habit Tracker
+                {t.loginTitle}
               </h1>
-              <p className="text-white/60">Kirish uchun kodingizni kiriting</p>
+              <p className="text-white/60">{t.loginSubtitle}</p>
             </div>
 
             <div className="space-y-4">
@@ -289,9 +438,8 @@ const HabitTrackerGame = () => {
                     setLoginError("");
                   }}
                   onKeyPress={(e) => e.key === "Enter" && handleLogin()}
-                  placeholder="Kirish kodi"
-                  className="w-full bg-white/10 text-white px-4 py-3 rounded-lg border border-white/20 focus:outline-none focus:border-blue-400 text-center text-lg font-semibold tracking-wider"
-                  autoFocus
+                  placeholder={t.loginPlaceholder}
+                  className="w-full bg-white/10 text-white px-4 py-3 rounded-lg border border-white/20 focus:outline-none focus:border-purple-400 text-center text-lg font-semibold tracking-wider"
                 />
                 {loginError && (
                   <p className="text-red-400 text-sm mt-2 text-center">
@@ -302,23 +450,23 @@ const HabitTrackerGame = () => {
 
               <button
                 onClick={handleLogin}
-                className="w-full bg-linear-to-r bg-blue-700 hover:to-blue-900 text-white py-3 rounded-lg font-semibold transition-all transform hover:scale-105 active:scale-100"
+                className="w-full bg-linear-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-3 rounded-lg font-semibold transition-all transform hover:scale-105"
               >
-                Kirish
+                {t.loginButton}
               </button>
             </div>
 
             <div className="mt-6 pt-6 border-t border-white/10">
-              <p className="text-white/80 text-xs text-center">
-                💡 Kod yo'qmi? Administrator bilan bog'laning
-              </p>
-              <a
-                className="text-white text-center block mt-2"
-                type="tel"
-                href="tel:+998996036611"
-              >
-                +998996036611
-              </a>
+              <p className="text-white/40 text-xs text-center">{t.noCode}</p>
+              <div className="text-center mt-4">
+                <a
+                  type="tel"
+                  className="text-white/40 text-center"
+                  href="tel:+998996036611"
+                >
+                  +998996036611
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -332,7 +480,7 @@ const HabitTrackerGame = () => {
       <div className="min-h-screen bg-linear-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-white animate-spin mx-auto mb-4" />
-          <p className="text-white text-lg">Ma'lumotlar yuklanmoqda...</p>
+          <p className="text-white text-lg">{t.loading}</p>
         </div>
       </div>
     );
@@ -342,55 +490,82 @@ const HabitTrackerGame = () => {
   const daysInMonth = getDaysInMonth(currentMonth);
 
   return (
-    <div className="min-h-screen bg-blue-950 p-4">
+    <div className="min-h-screen bg-linear-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
       <div className="max-w-7xl mx-auto">
+        {/* Header */}
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-6 border border-white/20">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-            <h1 className="text-xl sm:text-3xl font-bold text-white flex items-center gap-3">
-              <Target className="w-7 h-7" />
-              Hayotingizni O'zgartiring
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
+            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+              <Target className="w-8 h-8" />
+              {t.title}
               {saving && <Loader2 className="w-5 h-5 animate-spin" />}
             </h1>
+            <div className="flex gap-2 flex-wrap">
+              {/* Language selector */}
+              <div className="flex gap-1 bg-white/5 rounded-lg p-1">
+                <button
+                  onClick={() => changeLanguage("uz")}
+                  className={`px-3 py-1 rounded text-xs font-medium transition ${
+                    language === "uz"
+                      ? "bg-purple-500 text-white"
+                      : "text-white/70 hover:text-white"
+                  }`}
+                >
+                  UZ
+                </button>
+                <button
+                  onClick={() => changeLanguage("ru")}
+                  className={`px-3 py-1 rounded text-xs font-medium transition ${
+                    language === "ru"
+                      ? "bg-purple-500 text-white"
+                      : "text-white/70 hover:text-white"
+                  }`}
+                >
+                  RU
+                </button>
+                <button
+                  onClick={() => changeLanguage("en")}
+                  className={`px-3 py-1 rounded text-xs font-medium transition ${
+                    language === "en"
+                      ? "bg-purple-500 text-white"
+                      : "text-white/70 hover:text-white"
+                  }`}
+                >
+                  EN
+                </button>
+              </div>
 
-            <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setView("calendar")}
-                className={`px-3 py-2 rounded-lg hover:scale-105 active:scale-100 ${
+                className={`px-4 py-2 rounded-lg font-medium transition ${
                   view === "calendar"
-                    ? "bg-blue-700 text-white"
-                    : "bg-white/10 text-white/70"
+                    ? "bg-purple-500 text-white"
+                    : "bg-white/10 text-white/70 hover:bg-white/20"
                 }`}
               >
-                <Calendar className="w-5 h-5 sm:hidden" />
-                <span className="hidden sm:flex items-center gap-2">
-                  <Calendar className="w-5 h-5" /> Calendar
-                </span>
+                <Calendar className="w-5 h-5" />
               </button>
-
               <button
                 onClick={() => setView("stats")}
-                className={`px-3 py-2 rounded-lg hover:scale-105 active:scale-100 ${
+                className={`px-4 py-2 rounded-lg font-medium transition ${
                   view === "stats"
-                    ? "bg-blue-700 text-white"
-                    : "bg-white/10 text-white/70"
+                    ? "bg-purple-500 text-white"
+                    : "bg-white/10 text-white/70 hover:bg-white/20"
                 }`}
               >
-                <TrendingUp className="w-5 h-5 sm:hidden" />
-                <span className="hidden sm:flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5" /> Stats
-                </span>
+                <TrendingUp className="w-5 h-5" />
               </button>
-
               <button
                 onClick={resetAllData}
-                className="px-3 py-2 rounded-lg bg-red-500/20 text-red-300 hover:scale-105 active:scale-100" 
+                className="px-4 py-2 rounded-lg font-medium bg-red-500/20 text-red-300 hover:bg-red-500/30 transition"
+                title={t.reset}
               >
-                Reset
+                {t.reset}
               </button>
-
               <button
                 onClick={handleLogout}
-                className="px-3 py-2 rounded-lg bg-white/10 text-white/70 hover:scale-105 active:scale-100"
+                className="px-4 py-2 rounded-lg font-medium bg-white/10 text-white/70 hover:bg-white/20 transition flex items-center gap-2"
+                title={t.logout}
               >
                 <LogOut className="w-5 h-5" />
               </button>
@@ -399,14 +574,14 @@ const HabitTrackerGame = () => {
 
           {/* User info */}
           <div className="mb-3 text-white/60 text-sm">
-            👤 Foydalanuvchi:{" "}
+            👤 {t.user}:{" "}
             <span className="font-semibold text-white/80">{currentUser}</span>
           </div>
 
           {/* Progress Bar */}
           <div className="bg-white/5 rounded-full h-8 overflow-hidden mb-3">
             <div
-              className="h-full bg-linear-to-r from-green-400 to-emerald-500 transition-all duration-500 flex items-center justify-end"
+              className="h-full bg-linear-to-r from-green-400 to-emerald-500 transition-all duration-500 flex items-center justify-end px-4"
               style={{ width: `${stats.percentage}%` }}
             >
               <span className="text-white font-bold text-sm">
@@ -417,11 +592,11 @@ const HabitTrackerGame = () => {
 
           <div className="flex justify-between text-white/70 text-sm">
             <span>
-              {stats.completed} / {stats.total} bajarildi
+              {stats.completed} / {stats.total} {t.completed}
             </span>
             <span className="flex items-center gap-2">
               <Award className="w-4 h-4 text-yellow-400" />
-              {Math.floor(stats.percentage / 10)} level
+              {Math.floor(stats.percentage / 10)} {t.level}
             </span>
           </div>
         </div>
@@ -431,50 +606,46 @@ const HabitTrackerGame = () => {
             {/* Habits List with Calendar */}
             <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-white">
-                  Mening Odatlarim
-                </h2>
+                <h2 className="text-2xl font-bold text-white">{t.myHabits}</h2>
                 <button
                   onClick={() => setShowAddHabit(true)}
-                  className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition hover:scale-105 active:scale-100"
+                  className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition"
                   disabled={saving}
                 >
                   <Plus className="w-5 h-5" />
-                  Qo'shish
+                  {t.addHabit}
                 </button>
               </div>
 
               {showAddHabit && (
                 <div className="bg-white/5 rounded-xl p-4 mb-4 border border-white/10">
-                  <div className="sm:flex gap-2">
+                  <div className="flex gap-2">
                     <input
                       type="text"
                       value={newHabitName}
                       onChange={(e) => setNewHabitName(e.target.value)}
                       onKeyPress={(e) => e.key === "Enter" && addHabit()}
-                      placeholder="Yangi odat nomi..."
-                      className="flex-1 bg-white/10 text-white w-full px-4 py-2 rounded-lg border border-white/20 focus:outline-none focus:border-blue-400"
+                      placeholder={t.newHabitPlaceholder}
+                      className="flex-1 bg-white/10 text-white px-4 py-2 rounded-lg border border-white/20 focus:outline-none focus:border-purple-400"
                       disabled={saving}
                     />
-                    <div className="flex justify-between items-center gap-2">
-                      <button
-                        onClick={addHabit}
-                        className="bg-green-500 hover:bg-green-600 my-4 sm:my-0 text-white px-4 py-2 rounded-lg transition disabled:opacity-50"
-                        disabled={saving}
-                      >
-                        <Check className="w-5 h-5" />
-                      </button>
-                      <button
-                        onClick={() => {
-                          setShowAddHabit(false);
-                          setNewHabitName("");
-                        }}
-                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
-                        disabled={saving}
-                      >
-                        <X className="w-5 h-5" />
-                      </button>
-                    </div>
+                    <button
+                      onClick={addHabit}
+                      className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition disabled:opacity-50"
+                      disabled={saving}
+                    >
+                      <Check className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowAddHabit(false);
+                        setNewHabitName("");
+                      }}
+                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
+                      disabled={saving}
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
                   </div>
                 </div>
               )}
@@ -484,7 +655,7 @@ const HabitTrackerGame = () => {
                   <thead>
                     <tr>
                       <th className="text-left text-white font-semibold p-2 sticky left-0 bg-slate-900/50 backdrop-blur">
-                        Odat
+                        {t.habit}
                       </th>
                       {Array.from({ length: daysInMonth }, (_, i) => {
                         const date = new Date(
@@ -492,16 +663,7 @@ const HabitTrackerGame = () => {
                           currentMonth.getMonth(),
                           i + 1
                         );
-                        const dayOfWeek = [
-                          "Ya",
-                          "Du",
-                          "Se",
-                          "Cho",
-                          "Pa",
-                          "Ju",
-                          "Sh",
-                          "Ya",
-                        ][date.getDay()];
+                        const dayOfWeek = t.weekDays[date.getDay()];
                         return (
                           <th key={i} className="text-center p-1 min-w-8">
                             <div className="text-white/50 text-xs">
@@ -622,9 +784,7 @@ const HabitTrackerGame = () => {
         )}
 
         <div className="mt-6 bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
-          <p className="text-blue-200 text-sm text-center">
-            💾 Sizning shaxsiy ma'lumotlaringiz xavfsiz.
-          </p>
+          <p className="text-blue-200 text-sm text-center">{t.infoMessage}</p>
         </div>
       </div>
     </div>
