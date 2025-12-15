@@ -458,14 +458,8 @@ const HabitTrackerGame = () => {
 
             <div className="mt-6 pt-6 border-t border-white/10">
               <p className="text-white/40 text-xs text-center">{t.noCode}</p>
-              <div className="text-center mt-4">
-                <a
-                  type="tel"
-                  className="text-white/40 text-center"
-                  href="tel:+998996036611"
-                >
-                  +998996036611
-                </a>
+              <div className="text-center mt-4 text-white">
+                <a href="tel:+998996036611">+998996036611</a>
               </div>
             </div>
           </div>
@@ -619,33 +613,35 @@ const HabitTrackerGame = () => {
 
               {showAddHabit && (
                 <div className="bg-white/5 rounded-xl p-4 mb-4 border border-white/10">
-                  <div className="flex gap-2">
+                  <div className="sm:flex items-center gap-2">
                     <input
                       type="text"
                       value={newHabitName}
                       onChange={(e) => setNewHabitName(e.target.value)}
                       onKeyPress={(e) => e.key === "Enter" && addHabit()}
                       placeholder={t.newHabitPlaceholder}
-                      className="flex-1 bg-white/10 text-white px-4 py-2 rounded-lg border border-white/20 focus:outline-none focus:border-purple-400"
+                      className="flex-1 bg-white/10 text-white px-4 py-2 rounded-lg border w-full border-white/20 focus:outline-none focus:border-purple-400"
                       disabled={saving}
                     />
-                    <button
-                      onClick={addHabit}
-                      className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition disabled:opacity-50"
-                      disabled={saving}
-                    >
-                      <Check className="w-5 h-5" />
-                    </button>
-                    <button
-                      onClick={() => {
-                        setShowAddHabit(false);
-                        setNewHabitName("");
-                      }}
-                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
-                      disabled={saving}
-                    >
-                      <X className="w-5 h-5" />
-                    </button>
+                    <div className="flex gap-2 my-4 items-center justify-between">
+                      <button
+                        onClick={addHabit}
+                        className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition disabled:opacity-50"
+                        disabled={saving}
+                      >
+                        <Check className="w-5 h-5" />
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowAddHabit(false);
+                          setNewHabitName("");
+                        }}
+                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
+                        disabled={saving}
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
