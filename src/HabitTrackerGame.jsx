@@ -5,7 +5,9 @@ import {
   Award,
   Target,
   Plus,
+  Trash,
   X,
+  Globe,
   Check,
   Loader2,
   LogOut,
@@ -33,7 +35,7 @@ const HabitTrackerGame = () => {
       level: "level",
       loading: "Ma'lumotlar yuklanmoqda...",
       saving: "Saqlanmoqda...",
-      reset: "Reset",
+      reset: "O'chirish",
       logout: "Chiqish",
       logoutConfirm: "Haqiqatan ham chiqmoqchimisiz?",
       resetConfirm:
@@ -62,7 +64,7 @@ const HabitTrackerGame = () => {
       level: "уровень",
       loading: "Загрузка данных...",
       saving: "Сохранение...",
-      reset: "Сброс",
+      reset: "Сброс все",
       logout: "Выход",
       logoutConfirm: "Вы действительно хотите выйти?",
       resetConfirm: "Удалить все данные? Это действие нельзя отменить!",
@@ -101,6 +103,7 @@ const HabitTrackerGame = () => {
       days: "days",
       habit: "Habit",
       weekDays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      useInstead: "wake up 05:00 AM",
     },
   };
 
@@ -178,7 +181,7 @@ const HabitTrackerGame = () => {
         const defaultHabits = [
           {
             id: 1,
-            name: "Wake up at 05:00",
+            name: `wake up 05:00 AM`,
             emoji: "⏰",
             color: "bg-cyan-100",
           },
@@ -219,8 +222,8 @@ const HabitTrackerGame = () => {
     } catch (error) {
       console.error("Error loading data:", error);
       const defaultHabits = [
-        { id: 1, name: "Wake up at 05:00", emoji: "⏰", color: "bg-cyan-100" },
-        { id: 2, name: "Gym", emoji: "💪", color: "bg-cyan-100" },
+        { id: 1, name: 'wake up 05:00 AM', emoji: "⏰", color: "bg-cyan-100" },
+        { id: 2, name: 'Gym', emoji: "💪", color: "bg-cyan-100" },
         {
           id: 3,
           name: "Stop Watching Porn",
@@ -319,7 +322,7 @@ const HabitTrackerGame = () => {
     let totalCompleted = 0;
 
     habits.forEach((habit) => {
-      for (let day = 1; day <= daysInMonth; day++) {
+      for (let day = 0; day <= daysInMonth; day++) {
         const key = `${habit.id}-${day}`;
         if (completions[key]) totalCompleted++;
       }
@@ -357,7 +360,6 @@ const HabitTrackerGame = () => {
         localStorage.removeItem(habitsKey);
         localStorage.removeItem(completionsKey);
         loadData(currentUser);
-        alert(t.resetSuccess);
       } catch (error) {
         console.error("Error deleting data:", error);
         alert(t.error);
@@ -382,39 +384,39 @@ const HabitTrackerGame = () => {
             <div className="flex justify-center gap-2 mb-6">
               <button
                 onClick={() => changeLanguage("uz")}
-                className={`px-4 py-2 rounded-lg font-medium transition ${
+                className={`px-4 py-2 rounded-lg hover:scale-110 active:scale-100 text-4xl transition ${
                   language === "uz"
-                    ? "bg-purple-500 text-white"
+                    ? "bg-black"
                     : "bg-white/10 text-white/70 hover:bg-white/20"
                 }`}
               >
-                O'zbek
+                🇺🇿
               </button>
               <button
                 onClick={() => changeLanguage("ru")}
-                className={`px-4 py-2 rounded-lg font-medium transition ${
+                className={`px-4 py-2 rounded-lg hover:scale-110 active:scale-100 text-4xl transition ${
                   language === "ru"
-                    ? "bg-purple-500 text-white"
+                    ? "bg-black"
                     : "bg-white/10 text-white/70 hover:bg-white/20"
                 }`}
               >
-                Русский
+                🇷🇺
               </button>
               <button
                 onClick={() => changeLanguage("en")}
-                className={`px-4 py-2 rounded-lg font-medium transition ${
+                className={`px-4 py-2 rounded-lg text-4xl hover:scale-110 active:scale-100 transition ${
                   language === "en"
-                    ? "bg-purple-500 text-white"
+                    ? "bg-black "
                     : "bg-white/10 text-white/70 hover:bg-white/20"
                 }`}
               >
-                English
+                🇺🇸
               </button>
             </div>
 
             <div className="text-center mb-8">
-              <div className="bg-purple-500/20 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Lock className="w-10 h-10 text-purple-300" />
+              <div className="bg-black/20 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Lock className="w-10 h-10 text-white" />
               </div>
               <h1 className="text-3xl font-bold text-white mb-2">
                 {t.loginTitle}
@@ -433,7 +435,7 @@ const HabitTrackerGame = () => {
                   }}
                   onKeyPress={(e) => e.key === "Enter" && handleLogin()}
                   placeholder={t.loginPlaceholder}
-                  className="w-full bg-white/10 text-white px-4 py-3 rounded-lg border border-white/20 focus:outline-none focus:border-purple-400 text-center text-lg font-semibold tracking-wider"
+                  className="w-full bg-white/10 text-white px-4 py-3 rounded-lg border border-white/20 focus:outline-none focus:border-blue-600 text-center text-lg font-semibold tracking-wider"
                 />
                 {loginError && (
                   <p className="text-red-400 text-sm mt-2 text-center">
@@ -453,7 +455,19 @@ const HabitTrackerGame = () => {
             <div className="mt-6 pt-6 border-t border-white/10">
               <p className="text-white/40 text-xs text-center">{t.noCode}</p>
               <div className="text-center mt-4 text-white">
-                <a href="tel:+998996036611">+998996036611</a>
+                <a
+                  className="flex items-center justify-center"
+                  href="https://t.me/tox1roff_16"
+                >
+                  {" "}
+                  <img
+                    className="mr-2"
+                    width={20}
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Telegram_2019_Logo.svg/1200px-Telegram_2019_Logo.svg.png"
+                    alt=""
+                  />
+                  @tox1roff_16
+                </a>
               </div>
             </div>
           </div>
@@ -476,80 +490,97 @@ const HabitTrackerGame = () => {
   const stats = calculateStats();
   const daysInMonth = getDaysInMonth(currentMonth);
 
+  // <button
+  //                 onClick={() => changeLanguage("uz")}
+  //                 className={`px-3 py-1 rounded text-xl hover:scale-110 active:scale-100 border border-black font-medium transition ${
+  //                   language === "uz"
+  //                     ? "bg-transparent text-black border border-black"
+  //                     : "text-white/70 hover:text-black"
+  //                 }`}
+  //               >
+  //                 🇺🇿 UZ
+  //               </button>
+  //               <button
+  //                 onClick={() => changeLanguage("ru")}
+  //                 className={`px-3 py-1 rounded text-xl hover:scale-110 active:scale-100 border border-black font-medium transition ${
+  //                   language === "ru"
+  //                     ? "bg-transparent text-black border border-black"
+  //                     : "text-white/70 hover:text-black"
+  //                 }`}
+  //               >
+  //                 🇷🇺 RU
+  //               </button>
+  //               <button
+  //                 onClick={() => changeLanguage("en")}
+  //                 className={`px-3 py-1 rounded text-xl hover:scale-110 active:scale-100 border border-black font-medium transition ${
+  //                   language === "en"
+  //                     ? "bg-transparent text-black border border-black"
+  //                     : "text-white/70 hover:text-black"
+  //                 }`}
+  //               >
+  //                 🇺🇸 ENG
+  //               </button>
+
   return (
-    <div className="min-h-screen bg-blue-950 p-4">
+    <div className="min-h-screen bg-white p-4">
       <div className="max-w-7xl mx-auto">
-        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-6 border border-white/20">
+        <div className="bg-black/30 backdrop-blur-lg p-6 mb-6 border border-black/30">
           <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
-            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+            <h1 className="text-3xl font-bold text-black flex items-center gap-3">
               <Target className="w-8 h-8" />
               {t.title}
               {saving && <Loader2 className="w-5 h-5 animate-spin" />}
             </h1>
-            <div className="flex gap-2 flex-wrap">
-              <div className="flex gap-1 bg-white/5 rounded-lg p-1">
-                <button
-                  onClick={() => changeLanguage("uz")}
-                  className={`px-3 py-1 rounded text-xs font-medium transition ${
-                    language === "uz"
-                      ? "bg-purple-500 text-white"
-                      : "text-white/70 hover:text-white"
-                  }`}
+            <div className="flex gap-2 flex-wrap items-center">
+              <div className="relative">
+                <select
+                  value={language}
+                  onChange={(e) => changeLanguage(e.target.value)}
+                  className="appearance-none bg-black/20 hover:scale-110 text-white px-2 pr-10 rounded-lg border border-black/30 focus:outline-none focus:border-black/30 cursor-pointer font-medium text-2xl w-20 hover:bg-black/40 transition"
                 >
-                  UZ
-                </button>
-                <button
-                  onClick={() => changeLanguage("ru")}
-                  className={`px-3 py-1 rounded text-xs font-medium transition ${
-                    language === "ru"
-                      ? "bg-purple-500 text-white"
-                      : "text-white/70 hover:text-white"
-                  }`}
-                >
-                  RU
-                </button>
-                <button
-                  onClick={() => changeLanguage("en")}
-                  className={`px-3 py-1 rounded text-xs font-medium transition ${
-                    language === "en"
-                      ? "bg-purple-500 text-white"
-                      : "text-white/70 hover:text-white"
-                  }`}
-                >
-                  EN
-                </button>
+                  <option value="uz" className="">
+                    🇺🇿 Uz
+                  </option>
+                  <option value="ru" className="">
+                    🇷🇺 Ru
+                  </option>
+                  <option value="en" className="">
+                    🇺🇸 Eng
+                  </option>
+                </select>
+                <Globe className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60 pointer-events-none" />
               </div>
 
               <button
                 onClick={() => setView("calendar")}
-                className={`px-4 py-2 rounded-lg font-medium transition ${
+                className={`px-4 py-2 rounded-lg hover:scale-110 active:scale-100 font-medium transition ${
                   view === "calendar"
-                    ? "bg-purple-500 text-white"
-                    : "bg-white/10 text-white/70 hover:bg-white/20"
+                    ? "bg-black text-white"
+                    : "border border-black text-black"
                 }`}
               >
                 <Calendar className="w-5 h-5" />
               </button>
               <button
                 onClick={() => setView("stats")}
-                className={`px-4 py-2 rounded-lg font-medium transition ${
+                className={`px-4 py-2 rounded-lg font-medium hover:scale-110 active:scale-100 transition ${
                   view === "stats"
-                    ? "bg-purple-500 text-white"
-                    : "bg-white/10 text-white/70 hover:bg-white/20"
+                    ? "bg-black text-white"
+                    : "border border-black text-black"
                 }`}
               >
                 <TrendingUp className="w-5 h-5" />
               </button>
               <button
                 onClick={resetAllData}
-                className="px-4 py-2 rounded-lg font-medium bg-red-500/20 text-red-300 hover:bg-red-500/30 transition"
+                className="px-4 py-2 rounded-lg font-medium hover:scale-110 active:scale-100 bg-red-500 text-red-300 transition"
                 title={t.reset}
               >
                 {t.reset}
               </button>
               <button
                 onClick={handleLogout}
-                className="px-4 py-2 rounded-lg font-medium bg-white/10 text-white/70 hover:bg-white/20 transition flex items-center gap-2"
+                className="px-4 py-2 hover:scale-110 active:scale-100 rounded-lg font-medium border border-black bg-white/10 text-black hover:bg-white/20 transition flex items-center gap-2"
                 title={t.logout}
               >
                 <LogOut className="w-5 h-5" />
@@ -586,16 +617,18 @@ const HabitTrackerGame = () => {
 
         {view === "calendar" ? (
           <>
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
+            <div className="bg-black/30 backdrop-blur-lg p-6 border border-gray-500">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-white">{t.myHabits}</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-black">
+                  {t.myHabits}
+                </h2>
                 <button
                   onClick={() => setShowAddHabit(true)}
-                  className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition"
+                  className="bg-white text-black px-4 hover:scale-110 active:scale-100 py-2 rounded-lg flex items-center gap-2 transition"
                   disabled={saving}
                 >
                   <Plus className="w-5 h-5" />
-                  {t.addHabit}
+                  <p className="hidden sm:block">{t.addHabit}</p>
                 </button>
               </div>
 
@@ -608,13 +641,13 @@ const HabitTrackerGame = () => {
                       onChange={(e) => setNewHabitName(e.target.value)}
                       onKeyPress={(e) => e.key === "Enter" && addHabit()}
                       placeholder={t.newHabitPlaceholder}
-                      className="flex-1 bg-white/10 text-white px-4 py-2 rounded-lg border w-full border-white/20 focus:outline-none focus:border-purple-400"
+                      className="flex-1 bg-white/10 text-black px-4 py-2 rounded-lg border w-full border-white/20 focus:outline-none focus:border-black"
                       disabled={saving}
                     />
                     <div className="flex gap-2 my-4 items-center justify-between">
                       <button
                         onClick={addHabit}
-                        className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition disabled:opacity-50"
+                        className="bg-green-500 hover:scale-110 active:scale-100 hover:bg-green-600 text-black px-4 py-2 rounded-lg transition disabled:opacity-50"
                         disabled={saving}
                       >
                         <Check className="w-5 h-5" />
@@ -624,7 +657,7 @@ const HabitTrackerGame = () => {
                           setShowAddHabit(false);
                           setNewHabitName("");
                         }}
-                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
+                        className="bg-red-500 hover:scale-110 active:scale-100 hover:bg-red-600 text-black px-4 py-2 rounded-lg transition"
                         disabled={saving}
                       >
                         <X className="w-5 h-5" />
@@ -634,54 +667,66 @@ const HabitTrackerGame = () => {
                 </div>
               )}
 
-              <div className="overflow-x-auto">
+              <div className="overflow-x-scroll">
                 <table className="w-full">
-                  <thead>
+                  <thead className="border-y border-r border-gray-500">
                     <tr>
-                      <th className="text-left text-white font-semibold p-2 sticky left-0 bg-slate-900/50 backdrop-blur">
+                      <th className="text-center font-semibold p-2 sticky left-0 bg-gray-500 text-white backdrop-blur">
                         {t.habit}
                       </th>
+
                       {Array.from({ length: daysInMonth }, (_, i) => {
                         const date = new Date(
                           currentMonth.getFullYear(),
                           currentMonth.getMonth(),
-                          i + 1
+                          currentMonth.getDate() + i
                         );
                         const dayOfWeek = t.weekDays[date.getDay()];
                         return (
-                          <th key={i} className="text-center p-1 min-w-8">
-                            <div className="text-white/50 text-xs">
-                              {dayOfWeek}
-                            </div>
-                            <div className="text-white/70 text-xs font-semibold">
-                              {i + 1}
+                          <th
+                            key={i}
+                            className="text-center border border-gray-500 p-1 min-w-8"
+                          >
+                            <tr className="flex flex-col border-gray-500">
+                              <div className="text-black text-xs">
+                                {dayOfWeek}
+                              </div>
+                            </tr>
+                            <div className="text-black text-xs font-semibold">
+                              {date.getDate()}.{date.getMonth()}.
+                              {date.getFullYear()}
                             </div>
                           </th>
                         );
                       })}
-                      <th className="text-center text-white/70 text-xs p-2">
-                        %
-                      </th>
+                      <th className="text-center text-black text-xs p-2">%</th>
                     </tr>
                   </thead>
                   <tbody>
                     {habits.map((habit) => {
                       const habitStats = getHabitStats(habit.id);
                       return (
-                        <tr key={habit.id} className="border-t border-white/10">
-                          <td className="p-2 sticky left-0 bg-slate-900/50 backdrop-blur">
-                            <div className="flex items-center gap-2 group">
-                              <span className="text-xl">{habit.emoji}</span>
-                              <span className="text-white text-sm">
+                        <tr
+                          key={habit.id}
+                          className="border-y border-r border-gray-500"
+                        >
+                          <td className="p-1 z-1 font-bold sticky left-0 text-center bg-green-400 backdrop-blur">
+                            <div className="flex items-center justify-between sm:w-50 md:w-70 group">
+                              <span className="text-xl text-center">
+                                {habit.emoji}
+                              </span>
+                              <span className="text-black text-center text-sm">
                                 {habit.name}
                               </span>
-                              <button
-                                onClick={() => deleteHabit(habit.id)}
-                                className="opacity-0 group-hover:opacity-100 ml-auto text-red-400 hover:text-red-300 transition"
-                                disabled={saving}
-                              >
-                                <X className="w-4 h-4" />
-                              </button>
+
+                              <div className="lg:opacity-0 lg:group-hover:opacity-100 tranisition-all">
+                                <button
+                                  onClick={() => deleteHabit(habit.id)}
+                                  className="group-hover:opacity-100 text-red-600 p-2 tranisition-all hover:scale-110 active:scale-100"
+                                >
+                                  <Trash className="w-4 h-4" />
+                                </button>
+                              </div>
                             </div>
                           </td>
                           {Array.from({ length: daysInMonth }, (_, i) => {
@@ -689,18 +734,21 @@ const HabitTrackerGame = () => {
                             const key = `${habit.id}-${day}`;
                             const isCompleted = completions[key];
                             return (
-                              <td key={day} className="p-1">
+                              <td
+                                key={day}
+                                className="border border-gray-500 text-center"
+                              >
                                 <button
                                   onClick={() => toggleHabit(habit.id, day)}
-                                  className={`w-7 h-7 rounded-md border-2 transition-all ${
+                                  className={`w-5 h-5 rounded-md border transition-all  ${
                                     isCompleted
-                                      ? "bg-green-500 border-green-400 scale-110"
-                                      : "border-white/20 hover:border-white/40 hover:bg-white/5"
+                                      ? "bg-green-500 border-green-500 hover:scale-110 active: scale-110"
+                                      : "border-gray-500 hover:scale-110 active:scale-100 hover:bg-white/5"
                                   }`}
                                   disabled={saving}
                                 >
                                   {isCompleted && (
-                                    <Check className="w-4 h-4 mx-auto text-white" />
+                                    <Check className="w-3 z-0 h-4 mx-auto text-black" />
                                   )}
                                 </button>
                               </td>
@@ -766,8 +814,8 @@ const HabitTrackerGame = () => {
           </div>
         )}
 
-        <div className="mt-6 bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
-          <p className="text-blue-200 text-sm text-center">{t.infoMessage}</p>
+        <div className="mt-6 bg-blue-500/60 border border-blue-500/20 rounded-lg p-4">
+          <p className="text-white text-sm text-center">{t.infoMessage}</p>
         </div>
       </div>
     </div>
