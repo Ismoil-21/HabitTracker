@@ -10,15 +10,12 @@ import {
   Loader2,
   LogOut,
   Lock,
-  Globe,
 } from "lucide-react";
 import Galaxy from "./Galaxy";
 
 const HabitTrackerGame = () => {
-  // Login kodlari - bu yerga o'z kodlaringizni qo'shing
   const VALID_CODES = ["Ismoil", "Mustafo", "Oyatilloh"];
 
-  // Translations
   const translations = {
     uz: {
       title: "Hayotingizni O'zgartiring",
@@ -47,7 +44,7 @@ const HabitTrackerGame = () => {
       infoMessage: "💾 Sizning shaxsiy ma'lumotlaringiz xavfsiz.",
       days: "kun",
       habit: "Odat",
-      weekDays: ["Ya", "Du", "Se", "Cho", "Pa", "Ju", "Sh", "Ya"],
+      weekDays: ["Ya", "Du", "Se", "Cho", "Pa", "Ju", "Sh"],
     },
     ru: {
       title: "Измените свою жизнь",
@@ -119,15 +116,14 @@ const HabitTrackerGame = () => {
   const [showAddHabit, setShowAddHabit] = useState(false);
   const [newHabitName, setNewHabitName] = useState("");
   const [view, setView] = useState("calendar");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   const t = translations[language];
 
-  // Check if user is logged in on mount
   useEffect(() => {
-    const savedUser = sessionStorage.getItem("currentUser");
-    const savedLanguage = sessionStorage.getItem("language");
+    const savedUser = localStorage.getItem("currentUser");
+    const savedLanguage = localStorage.getItem("language");
     if (savedLanguage) {
       setLanguage(savedLanguage);
     }
@@ -135,12 +131,14 @@ const HabitTrackerGame = () => {
       setCurrentUser(savedUser);
       setIsLoggedIn(true);
       loadData(savedUser);
+    } else {
+      setLoading(false);
     }
   }, []);
 
   const changeLanguage = (lang) => {
     setLanguage(lang);
-    sessionStorage.setItem("language", lang);
+    localStorage.setItem("language", lang);
   };
 
   const handleLogin = () => {
@@ -149,7 +147,7 @@ const HabitTrackerGame = () => {
     if (VALID_CODES.includes(code)) {
       setCurrentUser(code);
       setIsLoggedIn(true);
-      sessionStorage.setItem("currentUser", code);
+      localStorage.setItem("currentUser", code);
       loadData(code);
       setLoginError("");
       setLoginCode("");
@@ -162,23 +160,21 @@ const HabitTrackerGame = () => {
     if (confirm(t.logoutConfirm)) {
       setIsLoggedIn(false);
       setCurrentUser("");
-      sessionStorage.removeItem("currentUser");
+      localStorage.removeItem("currentUser");
       setHabits([]);
       setCompletions({});
     }
   };
 
-  const loadData = async (userCode) => {
+  const loadData = (userCode) => {
     try {
       setLoading(true);
 
-      // Load habits for this user
       const habitsKey = `habits_${userCode}`;
-      const habitsResult = await window.storage.get(habitsKey);
-      if (habitsResult && habitsResult.value) {
-        setHabits(JSON.parse(habitsResult.value));
+      const savedHabits = localStorage.getItem(habitsKey);
+      if (savedHabits) {
+        setHabits(JSON.parse(savedHabits));
       } else {
-        // Default habits if none exist
         const defaultHabits = [
           {
             id: 1,
@@ -212,14 +208,13 @@ const HabitTrackerGame = () => {
           { id: 10, name: "Cold Shower", emoji: "🚿", color: "bg-cyan-100" },
         ];
         setHabits(defaultHabits);
-        await window.storage.set(habitsKey, JSON.stringify(defaultHabits));
+        localStorage.setItem(habitsKey, JSON.stringify(defaultHabits));
       }
 
-      // Load completions for this user
       const completionsKey = `completions_${userCode}`;
-      const completionsResult = await window.storage.get(completionsKey);
-      if (completionsResult && completionsResult.value) {
-        setCompletions(JSON.parse(completionsResult.value));
+      const savedCompletions = localStorage.getItem(completionsKey);
+      if (savedCompletions) {
+        setCompletions(JSON.parse(savedCompletions));
       }
     } catch (error) {
       console.error("Error loading data:", error);
@@ -256,11 +251,11 @@ const HabitTrackerGame = () => {
     }
   };
 
-  const saveHabits = async (newHabits) => {
+  const saveHabits = (newHabits) => {
     try {
       setSaving(true);
       const habitsKey = `habits_${currentUser}`;
-      await window.storage.set(habitsKey, JSON.stringify(newHabits));
+      localStorage.setItem(habitsKey, JSON.stringify(newHabits));
       setHabits(newHabits);
     } catch (error) {
       console.error("Error saving habits:", error);
@@ -270,11 +265,11 @@ const HabitTrackerGame = () => {
     }
   };
 
-  const saveCompletions = async (newCompletions) => {
+  const saveCompletions = (newCompletions) => {
     try {
       setSaving(true);
       const completionsKey = `completions_${currentUser}`;
-      await window.storage.set(completionsKey, JSON.stringify(newCompletions));
+      localStorage.setItem(completionsKey, JSON.stringify(newCompletions));
       setCompletions(newCompletions);
     } catch (error) {
       console.error("Error saving completions:", error);
@@ -290,16 +285,16 @@ const HabitTrackerGame = () => {
     return new Date(year, month + 1, 0).getDate();
   };
 
-  const toggleHabit = async (habitId, day) => {
+  const toggleHabit = (habitId, day) => {
     const key = `${habitId}-${day}`;
     const newCompletions = {
       ...completions,
       [key]: !completions[key],
     };
-    await saveCompletions(newCompletions);
+    saveCompletions(newCompletions);
   };
 
-  const addHabit = async () => {
+  const addHabit = () => {
     if (newHabitName.trim()) {
       const newHabit = {
         id: Date.now(),
@@ -307,15 +302,15 @@ const HabitTrackerGame = () => {
         emoji: "✨",
         color: "bg-cyan-100",
       };
-      await saveHabits([...habits, newHabit]);
+      saveHabits([...habits, newHabit]);
       setNewHabitName("");
       setShowAddHabit(false);
     }
   };
 
-  const deleteHabit = async (habitId) => {
+  const deleteHabit = (habitId) => {
     const newHabits = habits.filter((h) => h.id !== habitId);
-    await saveHabits(newHabits);
+    saveHabits(newHabits);
   };
 
   const calculateStats = () => {
@@ -354,14 +349,14 @@ const HabitTrackerGame = () => {
     };
   };
 
-  const resetAllData = async () => {
+  const resetAllData = () => {
     if (confirm(t.resetConfirm)) {
       try {
         const habitsKey = `habits_${currentUser}`;
         const completionsKey = `completions_${currentUser}`;
-        await window.storage.delete(habitsKey);
-        await window.storage.delete(completionsKey);
-        await loadData(currentUser);
+        localStorage.removeItem(habitsKey);
+        localStorage.removeItem(completionsKey);
+        loadData(currentUser);
         alert(t.resetSuccess);
       } catch (error) {
         console.error("Error deleting data:", error);
@@ -370,11 +365,10 @@ const HabitTrackerGame = () => {
     }
   };
 
-  // Login screen
   if (!isLoggedIn) {
     return (
       <div
-        className="flex items-center justify-center bg-black"
+        className="flex items-center px-10 justify-center bg-black"
         style={{
           width: "100%",
           height: "100vh",
@@ -384,7 +378,7 @@ const HabitTrackerGame = () => {
       >
         <Galaxy />
         <div className="min-h-screen flex items-center justify-center p-4">
-          <div className="bg-white/10 absolute  backdrop-blur-lg rounded-3xl p-8 border border-white/20 max-w-md w-full">
+          <div className="bg-white/10 absolute backdrop-blur-lg rounded-3xl p-8 border border-white/20 w-90 sm:w-100">
             <div className="flex justify-center gap-2 mb-6">
               <button
                 onClick={() => changeLanguage("uz")}
@@ -450,7 +444,7 @@ const HabitTrackerGame = () => {
 
               <button
                 onClick={handleLogin}
-                className="w-full bg-linear-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-3 rounded-lg font-semibold transition-all transform hover:scale-105"
+                className="w-full bg-blue-800 hover:bg-blue-900 text-white py-3 rounded-lg font-semibold transition-all transform hover:scale-105"
               >
                 {t.loginButton}
               </button>
@@ -468,10 +462,9 @@ const HabitTrackerGame = () => {
     );
   }
 
-  // Loading screen
   if (loading) {
     return (
-      <div className="min-h-screen bg-linear-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-blue-800 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-white animate-spin mx-auto mb-4" />
           <p className="text-white text-lg">{t.loading}</p>
@@ -486,7 +479,6 @@ const HabitTrackerGame = () => {
   return (
     <div className="min-h-screen bg-blue-950 p-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-6 border border-white/20">
           <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
             <h1 className="text-3xl font-bold text-white flex items-center gap-3">
@@ -495,7 +487,6 @@ const HabitTrackerGame = () => {
               {saving && <Loader2 className="w-5 h-5 animate-spin" />}
             </h1>
             <div className="flex gap-2 flex-wrap">
-              {/* Language selector */}
               <div className="flex gap-1 bg-white/5 rounded-lg p-1">
                 <button
                   onClick={() => changeLanguage("uz")}
@@ -566,16 +557,14 @@ const HabitTrackerGame = () => {
             </div>
           </div>
 
-          {/* User info */}
           <div className="mb-3 text-white/60 text-sm">
             👤 {t.user}:{" "}
             <span className="font-semibold text-white/80">{currentUser}</span>
           </div>
 
-          {/* Progress Bar */}
           <div className="bg-white/5 rounded-full h-8 overflow-hidden mb-3">
             <div
-              className="h-full bg-linear-to-r from-green-400 to-emerald-500 transition-all duration-500 flex items-center justify-end px-4"
+              className="h-full bg-green-500 transition-all duration-500 flex items-center justify-end px-4"
               style={{ width: `${stats.percentage}%` }}
             >
               <span className="text-white font-bold text-sm">
@@ -597,7 +586,6 @@ const HabitTrackerGame = () => {
 
         {view === "calendar" ? (
           <>
-            {/* Habits List with Calendar */}
             <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-white">{t.myHabits}</h2>
@@ -740,7 +728,6 @@ const HabitTrackerGame = () => {
             </div>
           </>
         ) : (
-          /* Statistics View */
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {habits.map((habit) => {
               const habitStats = getHabitStats(habit.id);
