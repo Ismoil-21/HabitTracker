@@ -16,7 +16,7 @@ import {
 import Galaxy from "./Galaxy";
 
 const HabitTrackerGame = () => {
-  const VALID_CODES = ["Ismoil", "Mustafo", "Oyatilloh"];
+  const VALID_CODES = ["Ismoil_17", "initiative", "Oyatilloh8576"];
 
   const translations = {
     uz: {
@@ -48,12 +48,14 @@ const HabitTrackerGame = () => {
       habit: "Odat",
       weekDays: ["1-kun", "2-kun", "3-kun", "4-kun", "5-kun", "6-kun", "7-kun"],
       progress: "📊 Umumiy Progress",
-      rating: "🏆 Eng Yaxshi Odatlar",
+      rating: "🏆 Eng Yaxshi Odatlar Reytingi",
       harakat: "📅 Kunlik Bajarilish",
       kun: "-kun",
       xulosa: "📈 Haftalik Xulosa",
       bajarilgan: "Bajarilgan",
       vazifa: "Jami Vazifalar",
+      weeks: "-hafta",
+      kunlar: "Kunlar",
     },
     ru: {
       title: "Измените свою жизнь",
@@ -91,12 +93,14 @@ const HabitTrackerGame = () => {
         "7-й день",
       ],
       progress: "📊 Общий прогресс",
-      rating: "🏆 Лучший привычка",
+      rating: "🏆 Рейтинг лучших привычек",
       harakat: "📅 Дневной прогресс",
       kun: "-день",
       xulosa: "📈 Частота выполнения",
       bajarilgan: "Выполнено",
       vazifa: "Всего заданий",
+      weeks: "-неделя",
+      kunlar: "Дни",
     },
     en: {
       title: "Change your life",
@@ -135,12 +139,14 @@ const HabitTrackerGame = () => {
       ],
       useInstead: "wake up 05:00 AM",
       progress: "📊 Overall progress",
-      rating: "🏆 Best habit",
+      rating: "🏆 Best habits rating",
       harakat: "📅 Daily progress",
       kun: "-day",
       xulosa: "📈 Frequency of completion",
       bajarilgan: "Completed",
       vazifa: "Total tasks",
+      weeks: "-week",
+      kunlar: "Days",
     },
   };
 
@@ -226,18 +232,19 @@ const HabitTrackerGame = () => {
           { id: 2, name: "Gym", emoji: "💪", color: "bg-cyan-100" },
           {
             id: 3,
-            name: "Stop Watching Porn",
-            emoji: "💧",
-            color: "bg-cyan-100",
-          },
-          {
-            id: 4,
             name: "Reading / Learning",
             emoji: "📚",
             color: "bg-cyan-100",
           },
-          { id: 5, name: "Budget Tracking", emoji: "💰", color: "bg-cyan-100" },
-          { id: 6, name: "Project Work", emoji: "🎯", color: "bg-cyan-100" },
+
+          { id: 4, name: "Budget Tracking", emoji: "💰", color: "bg-cyan-100" },
+          { id: 5, name: "Project Work", emoji: "🎯", color: "bg-cyan-100" },
+          {
+            id: 6,
+            name: "Stop Watching Porn",
+            emoji: "💧",
+            color: "bg-cyan-100",
+          },
           { id: 7, name: "No Alcohol", emoji: "🥤", color: "bg-cyan-100" },
           {
             id: 8,
@@ -264,18 +271,19 @@ const HabitTrackerGame = () => {
         { id: 2, name: "Gym", emoji: "💪", color: "bg-cyan-100" },
         {
           id: 3,
-          name: "Stop Watching Porn",
-          emoji: "💧",
-          color: "bg-cyan-100",
-        },
-        {
-          id: 4,
           name: "Reading / Learning",
           emoji: "📚",
           color: "bg-cyan-100",
         },
-        { id: 5, name: "Budget Tracking", emoji: "💰", color: "bg-cyan-100" },
-        { id: 6, name: "Project Work", emoji: "🎯", color: "bg-cyan-100" },
+
+        { id: 4, name: "Budget Tracking", emoji: "💰", color: "bg-cyan-100" },
+        { id: 5, name: "Project Work", emoji: "🎯", color: "bg-cyan-100" },
+        {
+          id: 6,
+          name: "Stop Watching Porn",
+          emoji: "💧",
+          color: "bg-cyan-100",
+        },
         { id: 7, name: "No Alcohol", emoji: "🥤", color: "bg-cyan-100" },
         {
           id: 8,
@@ -529,9 +537,9 @@ const HabitTrackerGame = () => {
   const daysInMonth = getDaysInMonth(currentMonth);
 
   return (
-    <div className="min-h-screen bg-white p-4">
+    <div className="min-h-screen bg-white p-4 animate-fade-in">
       <div className="max-w-7xl mx-auto">
-        <div className="bg-black/30 backdrop-blur-lg p-6 mb-6 border border-black/30">
+        <div className="bg-black/10 backdrop-blur-lg p-6 mb-6 border border-white/5 rounded-3xl">
           <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
             <h1 className="text-3xl font-bold text-black flex items-center gap-3">
               <Target className="w-8 h-8" />
@@ -542,7 +550,7 @@ const HabitTrackerGame = () => {
               <div className="relative">
                 <button
                   onClick={() => setShowLangMenu(!showLangMenu)}
-                  className="flex items-center w-25 justify-between bg-black/30 hover:bg-black/50 text-white px-5 py-1 rounded-lg font-medium transition shadow-lg"
+                  className="flex items-center w-25 justify-between bg-black/30 hover:bg-black/50 text-red-500 px-5 py-1 rounded-lg font-medium transition shadow-lg"
                 >
                   <span className="text-xl">
                     {language === "uz" ? "🇺🇿" : language === "ru" ? "🇷🇺" : "🇬🇧"}
@@ -679,23 +687,22 @@ const HabitTrackerGame = () => {
             </div>
           </div>
 
-          <div className="mb-3 text-white/60 text-sm">
+          <div className="mb-3 text-black/70 text-sm">
             👤 {t.user}:{" "}
-            <span className="font-semibold text-white/80">{currentUser}</span>
+            <span className="font-semibold text-black/80">{currentUser}</span>
           </div>
 
-          <div className="bg-white/5 rounded-full h-8 overflow-hidden mb-3">
+          <div className="bg-white/5 rounded-full border border-black/20 h-8 overflow-hidden mb-3">
+            <span className="text-black absolute bottom-13 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center font-bold text-sm">
+              {stats.percentage}%
+            </span>
             <div
               className="h-full bg-green-500 transition-all duration-500 flex items-center justify-end px-4"
               style={{ width: `${stats.percentage}%` }}
-            >
-              <span className="text-white font-bold text-sm">
-                {stats.percentage}%
-              </span>
-            </div>
+            ></div>
           </div>
 
-          <div className="flex justify-between text-white/70 text-sm">
+          <div className="flex justify-between text-black/70 text-sm">
             <span>
               {stats.completed} / {stats.total} {t.completed}
             </span>
@@ -708,7 +715,7 @@ const HabitTrackerGame = () => {
 
         {view === "calendar" ? (
           <>
-            <div className="bg-black/10 backdrop-blur-lg z-0 p-6 border border-gray-500">
+            <div className="bg-black/10 backdrop-blur-lg z-0 p-6 border border-white/5 rounded-3xl">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl sm:text-2xl font-bold text-black">
                   {t.myHabits}
@@ -732,7 +739,7 @@ const HabitTrackerGame = () => {
                       onChange={(e) => setNewHabitName(e.target.value)}
                       onKeyPress={(e) => e.key === "Enter" && addHabit()}
                       placeholder={t.newHabitPlaceholder}
-                      className="flex-1 bg-white/10 text-black px-4 py-2 rounded-lg border w-full border-white/20 focus:outline-none focus:border-black"
+                      className="flex-1 bg-white/10 text-black px-4 py-2 rounded-lg border w-full border-black/20 focus:outline-none focus:border-black"
                       disabled={saving}
                     />
                     <div className="flex gap-2 my-4 items-center justify-between">
@@ -790,7 +797,7 @@ const HabitTrackerGame = () => {
                       return (
                         <tr
                           key={habit.id}
-                          className="border-y border-r p border-gray-500"
+                          className="border-y border-r rounded-2xl border-gray-500"
                         >
                           <td className="p-1 z-1 font-bold sticky left-0 text-center bg-green-300 backdrop-blur">
                             <div className="flex items-center justify-between sm:w-50 md:w-70 group">
@@ -816,13 +823,10 @@ const HabitTrackerGame = () => {
                             const key = `${habit.id}-${day}`;
                             const isCompleted = completions[key];
                             return (
-                              <td
-                                key={day}
-                                className="border border-gray-500 text-center"
-                              >
+                              <td key={day} className="text-center">
                                 <button
                                   onClick={() => toggleHabit(habit.id, day)}
-                                  className={`w-5 h-5 rounded-md border transition-all  ${
+                                  className={`w-6 h-6 rounded-md border transition-all  ${
                                     isCompleted
                                       ? "bg-green-500 border-green-500 hover:scale-110 active: scale-110"
                                       : "border-gray-500 hover:scale-110 active:scale-100 hover:bg-white/5"
@@ -859,12 +863,11 @@ const HabitTrackerGame = () => {
           </>
         ) : (
           <div className="space-y-6">
-            {/* Overall Progress Chart */}
-            <div className="bg-black/30 backdrop-blur-lg p-6 border border-gray-500">
+            <div className="bg-black/10 backdrop-blur-lg p-6 rounded-3xl">
               <h3 className="text-xl font-bold text-black mb-4">
                 {t.progress}
               </h3>
-              <div className="bg-white/10 w-full m-auto overflow-x-auto rounded-lg p-4">
+              <div className="bg-black/10 w-full m-auto overflow-x-auto rounded-lg p-4">
                 <svg viewBox="0 0 800 300" className="w-200 sm:w-full sm:h-90">
                   <defs>
                     <linearGradient
@@ -884,7 +887,6 @@ const HabitTrackerGame = () => {
                     </linearGradient>
                   </defs>
 
-                  {/* Grid lines */}
                   {[0, 25, 50, 75, 100].map((y) => (
                     <line
                       key={y}
@@ -899,7 +901,6 @@ const HabitTrackerGame = () => {
                     />
                   ))}
 
-                  {/* Area chart */}
                   {(() => {
                     const points = habits.map((habit, index) => {
                       const habitStats = getHabitStats(habit.id);
@@ -985,7 +986,7 @@ const HabitTrackerGame = () => {
             </div>
 
             {/* Best Performing Habits */}
-            <div className="bg-black/30 backdrop-blur-lg p-6 border border-gray-500">
+            <div className="bg-black/10 backdrop-blur-lg p-6 rounded-3xl">
               <h3 className="text-xl font-bold text-black mb-4">{t.rating}</h3>
               <div className="space-y-3">
                 {habits
@@ -994,11 +995,11 @@ const HabitTrackerGame = () => {
                     stats: getHabitStats(habit.id),
                   }))
                   .sort((a, b) => b.stats.percentage - a.stats.percentage)
-                  .slice(0, 5)
+                  .slice(0, 3)
                   .map((habit, index) => (
                     <div
                       key={habit.id}
-                      className="flex items-center gap-4 bg-white/10 rounded-lg p-4"
+                      className="flex items-center gap-4 bg-black/10 rounded-lg p-4"
                     >
                       <span className="text-3xl font-bold text-black">
                         #{index + 1}
@@ -1032,10 +1033,8 @@ const HabitTrackerGame = () => {
             </div>
 
             {/* Daily Completion Rate */}
-            <div className="bg-black/30 backdrop-blur-lg p-6 border border-gray-500">
-              <h3 className="text-xl font-bold text-black mb-4">
-                📅 Haftalik Bajarilish
-              </h3>
+            <div className="bg-black/10 backdrop-blur-lg p-6 rounded-3xl">
+              <h3 className="text-xl font-bold text-black mb-4">{t.harakat}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {Array.from({ length: 4 }, (_, weekIndex) => {
                   const weekStart = weekIndex * 7 + 1;
@@ -1057,19 +1056,16 @@ const HabitTrackerGame = () => {
                       : 0;
 
                   return (
-                    <div
-                      key={weekIndex}
-                      className="bg-white/10 rounded-lg p-4 border border-gray-400"
-                    >
+                    <div key={weekIndex} className="bg-black/10 rounded-lg p-4">
                       <div className="text-center mb-3">
                         <h4 className="text-lg font-bold text-black">
-                          {weekIndex + 1}-hafta
+                          {weekIndex + 1}
+                          {t.weeks}
                         </h4>
                         <p className="text-xs text-gray-700">
-                          {weekStart}-{weekEnd} kunlar
+                          {weekStart}-{weekEnd} {t.days}
                         </p>
                       </div>
-
                       <div className="flex items-center justify-center mb-3">
                         <div className="relative w-32 h-32">
                           <svg className="w-full h-full transform -rotate-90">
@@ -1107,13 +1103,14 @@ const HabitTrackerGame = () => {
                           </div>
                         </div>
                       </div>
-
                       <div className="text-center">
                         <p className="text-sm text-gray-700">
-                          {weekCompleted} / {weekTotal} bajarildi
+                          {weekCompleted} / {weekTotal} {t.bajarilgan}
                         </p>
+                        <h3 className="text-lg font-bold text-black my-4">
+                          {t.kunlar}
+                        </h3>
                       </div>
-
                       <div className="mt-3 grid grid-cols-7 gap-1">
                         {Array.from(
                           { length: weekEnd - weekStart + 1 },
@@ -1157,7 +1154,7 @@ const HabitTrackerGame = () => {
             </div>
 
             {/* Weekly Summary */}
-            <div className="bg-black/30 backdrop-blur-lg p-6 border border-gray-500">
+            <div className="bg-black/10 backdrop-blur-lg p-6 rounded-3xl">
               <h3 className="text-xl font-bold text-black mb-4">{t.xulosa}</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-green-500/20 border border-green-500 rounded-lg p-4">
@@ -1185,7 +1182,7 @@ const HabitTrackerGame = () => {
             </div>
 
             {/* Habit Details */}
-            <div className="bg-black/30 backdrop-blur-lg p-6 border border-gray-500">
+            <div className="bg-black/10 backdrop-blur-lg p-6 rounded-3xl">
               <h3 className="text-xl font-bold text-black mb-4">
                 📋 Batafsil Ma'lumot
               </h3>
@@ -1232,7 +1229,7 @@ const HabitTrackerGame = () => {
         )}
 
         <div className="mt-6 bg-blue-500/60 border border-blue-500/20 rounded-lg p-4">
-          <p className="text-white text-sm text-center">{t.infoMessage}</p>
+          <p className="text-white text-lg text-center">{t.infoMessage}</p>
         </div>
       </div>
     </div>
