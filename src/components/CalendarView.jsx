@@ -83,8 +83,8 @@ const CalendarView = ({
                     key={i}
                     className="text-center border border-gray-500 p-2"
                   >
-                    <div className="text-black w-9 text-xs font-semibold">
-                      {dayNumber} kun
+                    <div className="text-black w-13 text-xs font-semibold">
+                      {dayNumber} {t.days}
                     </div>
                   </th>
                 );
