@@ -46,7 +46,7 @@ const HabitTrackerGame = () => {
       infoMessage: "💾 Sizning shaxsiy ma'lumotlaringiz xavfsiz.",
       days: "kun",
       habit: "Odat",
-      weekDays: ["Ya", "Du", "Se", "Cho", "Pa", "Ju", "Sh"],
+      weekDays: ["1-kun", "2-kun", "3-kun", "4-kun", "5-kun", "6-kun", "7-kun"],
     },
     ru: {
       title: "Измените свою жизнь",
@@ -74,7 +74,15 @@ const HabitTrackerGame = () => {
       infoMessage: "💾 Ваши личные данные в безопасности.",
       days: "дней",
       habit: "Привычка",
-      weekDays: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+      weekDays: [
+        "1-й день",
+        "2-й день",
+        "3-й день",
+        "4-й день",
+        "5-й день",
+        "6-й день",
+        "7-й день",
+      ],
     },
     en: {
       title: "Change your life",
@@ -102,7 +110,15 @@ const HabitTrackerGame = () => {
       infoMessage: "💾 Your personal data is secure.",
       days: "days",
       habit: "Habit",
-      weekDays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      weekDays: [
+        "1st day",
+        "2nd day",
+        "3rd day",
+        "4th day",
+        "5th day",
+        "6th day",
+        "7th day",
+      ],
       useInstead: "wake up 05:00 AM",
     },
   };
@@ -671,7 +687,7 @@ const HabitTrackerGame = () => {
 
         {view === "calendar" ? (
           <>
-            <div className="bg-black/30 backdrop-blur-lg z-0 p-6 border border-gray-500">
+            <div className="bg-black/10 backdrop-blur-lg z-0 p-6 border border-gray-500">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl sm:text-2xl font-bold text-black">
                   {t.myHabits}
@@ -730,29 +746,20 @@ const HabitTrackerGame = () => {
                       </th>
 
                       {Array.from({ length: daysInMonth }, (_, i) => {
-                        const date = new Date(
-                          currentMonth.getFullYear(),
-                          currentMonth.getMonth(),
-                          currentMonth.getDate() + i
-                        );
-                        const dayOfWeek = t.weekDays[date.getDay()];
+                        const dayNumber = i + 1;
+
                         return (
                           <th
                             key={i}
                             className="text-center border border-gray-500 p-1 min-w-8"
                           >
-                            <tr className="flex flex-col border-gray-500">
-                              <div className="text-black text-xs">
-                                {dayOfWeek}
-                              </div>
-                            </tr>
                             <div className="text-black text-xs font-semibold">
-                              {date.getDate()}.{date.getMonth() + 1}.
-                              {date.getFullYear()}
+                              {dayNumber} kun
                             </div>
                           </th>
                         );
                       })}
+
                       <th className="text-center text-black text-xs p-2">%</th>
                     </tr>
                   </thead>
@@ -764,7 +771,7 @@ const HabitTrackerGame = () => {
                           key={habit.id}
                           className="border-y border-r border-gray-500"
                         >
-                          <td className="p-1 z-1 font-bold sticky left-0 text-center bg-green-400 backdrop-blur">
+                          <td className="p-1 z-1 font-bold sticky left-0 text-center bg-green-300 backdrop-blur">
                             <div className="flex items-center justify-between sm:w-50 md:w-70 group">
                               <span className="text-xl text-center">
                                 {habit.emoji}
@@ -776,7 +783,7 @@ const HabitTrackerGame = () => {
                               <div className="lg:opacity-0 lg:group-hover:opacity-100 tranisition-all">
                                 <button
                                   onClick={() => deleteHabit(habit.id)}
-                                  className="group-hover:opacity-100 text-red-600 p-2 tranisition-all hover:scale-110 active:scale-100"
+                                  className="group-hover:opacity-100 text-red-600 tranisition-all hover:scale-110 active:scale-100"
                                 >
                                   <Trash className="w-4 h-4" />
                                 </button>
@@ -836,10 +843,11 @@ const HabitTrackerGame = () => {
               <h3 className="text-xl font-bold text-black mb-4">
                 📊 Umumiy Progress
               </h3>
-              <div className="bg-white/10 rounded-lg p-4">
-                <svg viewBox="0 0 800 300" className="w-full h-64">
+              <div className="bg-white/10 w-full m-auto overflow-x-auto rounded-lg p-4">
+                <svg viewBox="0 0 800 300" className="w-200 sm:w-full sm:h-90">
                   <defs>
                     <linearGradient
+                      className="fixed right-0 bottom-0"
                       id="areaGradient"
                       x1="0%"
                       y1="0%"
@@ -928,9 +936,9 @@ const HabitTrackerGame = () => {
                               x={point.x}
                               y="280"
                               textAnchor="middle"
-                              fontSize="20"
+                              fontSize="7"
                             >
-                              {point.emoji}
+                              {point.name}
                             </text>
                           </g>
                         ))}
