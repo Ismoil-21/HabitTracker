@@ -50,7 +50,7 @@ const HabitTrackerGame = () => {
       progress: "📊 Umumiy Progress",
       rating: "🏆 Eng Yaxshi Odatlar Reytingi",
       harakat: "📅 Kunlik Bajarilish",
-      kun: "-kun",
+      kun: "kun",
       xulosa: "📈 Haftalik Xulosa",
       bajarilgan: "Bajarilgan",
       vazifa: "Jami Vazifalar",
@@ -95,7 +95,7 @@ const HabitTrackerGame = () => {
       progress: "📊 Общий прогресс",
       rating: "🏆 Рейтинг лучших привычек",
       harakat: "📅 Дневной прогресс",
-      kun: "-день",
+      kun: "день",
       xulosa: "📈 Частота выполнения",
       bajarilgan: "Выполнено",
       vazifa: "Всего заданий",
@@ -141,7 +141,7 @@ const HabitTrackerGame = () => {
       progress: "📊 Overall progress",
       rating: "🏆 Best habits rating",
       harakat: "📅 Daily progress",
-      kun: "-day",
+      kun: "day",
       xulosa: "📈 Frequency of completion",
       bajarilgan: "Completed",
       vazifa: "Total tasks",
@@ -225,35 +225,40 @@ const HabitTrackerGame = () => {
         const defaultHabits = [
           {
             id: 1,
-            name: `wake up 05:00 AM`,
+            name: `Просыпаться в 05:00 утра`,
             emoji: "⏰",
             color: "bg-cyan-100",
           },
-          { id: 2, name: "Gym", emoji: "💪", color: "bg-cyan-100" },
+          { id: 2, name: "Тренировка", emoji: "💪", color: "bg-cyan-100" },
           {
             id: 3,
-            name: "Reading / Learning",
+            name: "Чтение / Обучение",
             emoji: "📚",
             color: "bg-cyan-100",
           },
 
-          { id: 4, name: "Budget Tracking", emoji: "💰", color: "bg-cyan-100" },
-          { id: 5, name: "Project Work", emoji: "🎯", color: "bg-cyan-100" },
+          { id: 4, name: "Трекинг бюджета", emoji: "💰", color: "bg-cyan-100" },
+          {
+            id: 5,
+            name: "Проектная работа",
+            emoji: "🎯",
+            color: "bg-cyan-100",
+          },
           {
             id: 6,
-            name: "Stop Watching Porn",
+            name: "Стоп смотреть порнографию",
             emoji: "💧",
             color: "bg-cyan-100",
           },
-          { id: 7, name: "No Alcohol", emoji: "🥤", color: "bg-cyan-100" },
+          { id: 7, name: "Без алкоголя", emoji: "🥤", color: "bg-cyan-100" },
           {
             id: 8,
-            name: "Social Media Detox",
+            name: "Детоксификация социальных сетей",
             emoji: "🌿",
             color: "bg-cyan-100",
           },
-          { id: 9, name: "Goal Journaling", emoji: "📝", color: "bg-cyan-100" },
-          { id: 10, name: "Cold Shower", emoji: "🚿", color: "bg-cyan-100" },
+          { id: 9, name: "Журналирование", emoji: "📝", color: "bg-cyan-100" },
+          { id: 10, name: "Холодная душ", emoji: "🚿", color: "bg-cyan-100" },
         ];
         setHabits(defaultHabits);
         localStorage.setItem(habitsKey, JSON.stringify(defaultHabits));
@@ -267,32 +272,37 @@ const HabitTrackerGame = () => {
     } catch (error) {
       console.error("Error loading data:", error);
       const defaultHabits = [
-        { id: 1, name: "wake up 05:00 AM", emoji: "⏰", color: "bg-cyan-100" },
-        { id: 2, name: "Gym", emoji: "💪", color: "bg-cyan-100" },
+        {
+          id: 1,
+          name: "Просыпаться в 05:00 утра",
+          emoji: "⏰",
+          color: "bg-cyan-100",
+        },
+        { id: 2, name: "Тренировка", emoji: "💪", color: "bg-cyan-100" },
         {
           id: 3,
-          name: "Reading / Learning",
+          name: "Чтение / Обучение",
           emoji: "📚",
           color: "bg-cyan-100",
         },
 
-        { id: 4, name: "Budget Tracking", emoji: "💰", color: "bg-cyan-100" },
-        { id: 5, name: "Project Work", emoji: "🎯", color: "bg-cyan-100" },
+        { id: 4, name: "Трекинг бюджета", emoji: "💰", color: "bg-cyan-100" },
+        { id: 5, name: "Проектная работа", emoji: "🎯", color: "bg-cyan-100" },
         {
           id: 6,
-          name: "Stop Watching Porn",
+          name: "Стоп смотреть порнографию",
           emoji: "💧",
           color: "bg-cyan-100",
         },
-        { id: 7, name: "No Alcohol", emoji: "🥤", color: "bg-cyan-100" },
+        { id: 7, name: "Без алкоголя", emoji: "🥤", color: "bg-cyan-100" },
         {
           id: 8,
-          name: "Social Media Detox",
+          name: "Детоксификация социальных сетей",
           emoji: "🌿",
           color: "bg-cyan-100",
         },
-        { id: 9, name: "Goal Journaling", emoji: "📝", color: "bg-cyan-100" },
-        { id: 10, name: "Cold Shower", emoji: "🚿", color: "bg-cyan-100" },
+        { id: 9, name: "Журналирование", emoji: "📝", color: "bg-cyan-100" },
+        { id: 10, name: "Холодная душ", emoji: "🚿", color: "bg-cyan-100" },
       ];
       setHabits(defaultHabits);
     } finally {
@@ -452,7 +462,7 @@ const HabitTrackerGame = () => {
                 onClick={() => changeLanguage("en")}
                 className={`px-4 py-2 rounded-lg text-4xl hover:scale-110 active:scale-100 transition ${
                   language === "en"
-                    ? "bg-black "
+                    ? "bg-black"
                     : "bg-white/10 text-white/70 hover:bg-white/20"
                 }`}
               >
@@ -782,7 +792,7 @@ const HabitTrackerGame = () => {
                             className="text-center border border-gray-500 p-1 min-w-8"
                           >
                             <div className="text-black text-xs font-semibold">
-                              {dayNumber} kun
+                              {dayNumber} {t.kun}
                             </div>
                           </th>
                         );
@@ -958,9 +968,9 @@ const HabitTrackerGame = () => {
                               x={point.x}
                               y="280"
                               textAnchor="middle"
-                              fontSize="7"
+                              fontSize="20"
                             >
-                              {point.name}
+                              {point.emoji}
                             </text>
                           </g>
                         ))}
