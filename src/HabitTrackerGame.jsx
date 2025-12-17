@@ -47,6 +47,13 @@ const HabitTrackerGame = () => {
       days: "kun",
       habit: "Odat",
       weekDays: ["1-kun", "2-kun", "3-kun", "4-kun", "5-kun", "6-kun", "7-kun"],
+      progress: "📊 Umumiy Progress",
+      rating: "🏆 Eng Yaxshi Odatlar",
+      harakat: "📅 Kunlik Bajarilish",
+      kun: "-kun",
+      xulosa: "📈 Haftalik Xulosa",
+      bajarilgan: "Bajarilgan",
+      vazifa: "Jami Vazifalar",
     },
     ru: {
       title: "Измените свою жизнь",
@@ -83,6 +90,13 @@ const HabitTrackerGame = () => {
         "6-й день",
         "7-й день",
       ],
+      progress: "📊 Общий прогресс",
+      rating: "🏆 Лучший привычка",
+      harakat: "📅 Дневной прогресс",
+      kun: "-день",
+      xulosa: "📈 Частота выполнения",
+      bajarilgan: "Выполнено",
+      vazifa: "Всего заданий",
     },
     en: {
       title: "Change your life",
@@ -120,6 +134,13 @@ const HabitTrackerGame = () => {
         "7th day",
       ],
       useInstead: "wake up 05:00 AM",
+      progress: "📊 Overall progress",
+      rating: "🏆 Best habit",
+      harakat: "📅 Daily progress",
+      kun: "-day",
+      xulosa: "📈 Frequency of completion",
+      bajarilgan: "Completed",
+      vazifa: "Total tasks",
     },
   };
 
@@ -769,7 +790,7 @@ const HabitTrackerGame = () => {
                       return (
                         <tr
                           key={habit.id}
-                          className="border-y border-r border-gray-500"
+                          className="border-y border-r p border-gray-500"
                         >
                           <td className="p-1 z-1 font-bold sticky left-0 text-center bg-green-300 backdrop-blur">
                             <div className="flex items-center justify-between sm:w-50 md:w-70 group">
@@ -841,7 +862,7 @@ const HabitTrackerGame = () => {
             {/* Overall Progress Chart */}
             <div className="bg-black/30 backdrop-blur-lg p-6 border border-gray-500">
               <h3 className="text-xl font-bold text-black mb-4">
-                📊 Umumiy Progress
+                {t.progress}
               </h3>
               <div className="bg-white/10 w-full m-auto overflow-x-auto rounded-lg p-4">
                 <svg viewBox="0 0 800 300" className="w-200 sm:w-full sm:h-90">
@@ -965,9 +986,7 @@ const HabitTrackerGame = () => {
 
             {/* Best Performing Habits */}
             <div className="bg-black/30 backdrop-blur-lg p-6 border border-gray-500">
-              <h3 className="text-xl font-bold text-black mb-4">
-                🏆 Eng Yaxshi Odatlar
-              </h3>
+              <h3 className="text-xl font-bold text-black mb-4">{t.rating}</h3>
               <div className="space-y-3">
                 {habits
                   .map((habit) => ({
@@ -1015,39 +1034,122 @@ const HabitTrackerGame = () => {
             {/* Daily Completion Rate */}
             <div className="bg-black/30 backdrop-blur-lg p-6 border border-gray-500">
               <h3 className="text-xl font-bold text-black mb-4">
-                📅 Kunlik Bajarilish
+                📅 Haftalik Bajarilish
               </h3>
-              <div className="grid grid-cols-7 gap-2">
-                {Array.from({ length: daysInMonth }, (_, i) => {
-                  const day = i + 1;
-                  let dayCompleted = 0;
-                  habits.forEach((habit) => {
-                    const key = `${habit.id}-${day}`;
-                    if (completions[key]) dayCompleted++;
-                  });
-                  const dayPercentage =
-                    habits.length > 0
-                      ? Math.round((dayCompleted / habits.length) * 100)
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {Array.from({ length: 4 }, (_, weekIndex) => {
+                  const weekStart = weekIndex * 7 + 1;
+                  const weekEnd = Math.min(weekStart + 6, daysInMonth);
+                  let weekCompleted = 0;
+                  let weekTotal = 0;
+
+                  for (let day = weekStart; day <= weekEnd; day++) {
+                    habits.forEach((habit) => {
+                      const key = `${habit.id}-${day}`;
+                      weekTotal++;
+                      if (completions[key]) weekCompleted++;
+                    });
+                  }
+
+                  const weekPercentage =
+                    weekTotal > 0
+                      ? Math.round((weekCompleted / weekTotal) * 100)
                       : 0;
 
                   return (
-                    <div key={day} className="flex flex-col items-center gap-1">
-                      <div
-                        className={`w-full h-16 rounded-lg flex items-center justify-center font-bold text-xs transition-all ${
-                          dayPercentage >= 70
-                            ? "bg-green-500 text-black"
-                            : dayPercentage >= 40
-                            ? "bg-yellow-500 text-black"
-                            : dayPercentage === 0
-                            ? "bg-gray-300 text-gray-600"
-                            : "bg-red-500 text-black"
-                        }`}
-                      >
-                        {dayPercentage}%
+                    <div
+                      key={weekIndex}
+                      className="bg-white/10 rounded-lg p-4 border border-gray-400"
+                    >
+                      <div className="text-center mb-3">
+                        <h4 className="text-lg font-bold text-black">
+                          {weekIndex + 1}-hafta
+                        </h4>
+                        <p className="text-xs text-gray-700">
+                          {weekStart}-{weekEnd} kunlar
+                        </p>
                       </div>
-                      <span className="text-xs text-black font-semibold">
-                        {day}
-                      </span>
+
+                      <div className="flex items-center justify-center mb-3">
+                        <div className="relative w-32 h-32">
+                          <svg className="w-full h-full transform -rotate-90">
+                            <circle
+                              cx="64"
+                              cy="64"
+                              r="56"
+                              fill="none"
+                              stroke="#e5e7eb"
+                              strokeWidth="12"
+                            />
+                            <circle
+                              cx="64"
+                              cy="64"
+                              r="56"
+                              fill="none"
+                              stroke={
+                                weekPercentage >= 70
+                                  ? "#10b981"
+                                  : weekPercentage >= 40
+                                  ? "#eab308"
+                                  : "#ef4444"
+                              }
+                              strokeWidth="12"
+                              strokeDasharray={`${
+                                (weekPercentage / 100) * 351.86
+                              } 351.86`}
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="text-2xl font-bold text-black">
+                              {weekPercentage}%
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="text-center">
+                        <p className="text-sm text-gray-700">
+                          {weekCompleted} / {weekTotal} bajarildi
+                        </p>
+                      </div>
+
+                      <div className="mt-3 grid grid-cols-7 gap-1">
+                        {Array.from(
+                          { length: weekEnd - weekStart + 1 },
+                          (_, dayIndex) => {
+                            const day = weekStart + dayIndex;
+                            let dayCompleted = 0;
+                            habits.forEach((habit) => {
+                              const key = `${habit.id}-${day}`;
+                              if (completions[key]) dayCompleted++;
+                            });
+                            const dayPercentage =
+                              habits.length > 0
+                                ? Math.round(
+                                    (dayCompleted / habits.length) * 100
+                                  )
+                                : 0;
+
+                            return (
+                              <div
+                                key={day}
+                                className={`w-8 h-8 rounded flex items-center justify-center text-xs font-bold ${
+                                  dayPercentage >= 70
+                                    ? "bg-green-500 text-black"
+                                    : dayPercentage >= 40
+                                    ? "bg-yellow-500 text-black"
+                                    : dayPercentage === 0
+                                    ? "bg-gray-300 text-gray-600"
+                                    : "bg-red-500 text-white"
+                                }`}
+                              >
+                                {day}
+                              </div>
+                            );
+                          }
+                        )}
+                      </div>
                     </div>
                   );
                 })}
@@ -1056,30 +1158,28 @@ const HabitTrackerGame = () => {
 
             {/* Weekly Summary */}
             <div className="bg-black/30 backdrop-blur-lg p-6 border border-gray-500">
-              <h3 className="text-xl font-bold text-black mb-4">
-                📈 Haftalik Xulosa
-              </h3>
+              <h3 className="text-xl font-bold text-black mb-4">{t.xulosa}</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-green-500/20 border border-green-500 rounded-lg p-4">
                   <div className="text-3xl mb-2">✅</div>
                   <div className="text-2xl font-bold text-black">
                     {stats.completed}
                   </div>
-                  <div className="text-sm text-gray-700">Bajarilgan</div>
+                  <div className="text-sm text-gray-700">{t.bajarilgan}</div>
                 </div>
                 <div className="bg-blue-500/20 border border-blue-500 rounded-lg p-4">
                   <div className="text-3xl mb-2">🎯</div>
                   <div className="text-2xl font-bold text-black">
                     {stats.total}
                   </div>
-                  <div className="text-sm text-gray-700">Jami Vazifalar</div>
+                  <div className="text-sm text-gray-700">{t.vazifa}</div>
                 </div>
                 <div className="bg-yellow-500/20 border border-yellow-500 rounded-lg p-4">
                   <div className="text-3xl mb-2">📊</div>
                   <div className="text-2xl font-bold text-black">
                     {stats.percentage}%
                   </div>
-                  <div className="text-sm text-gray-700">Umumiy Progress</div>
+                  <div className="text-sm text-gray-700">{t.progress}</div>
                 </div>
               </div>
             </div>
