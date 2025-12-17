@@ -121,6 +121,7 @@ const HabitTrackerGame = () => {
   const [view, setView] = useState("calendar");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [showLangMenu, setShowLangMenu] = useState(false);
 
   const t = translations[language];
 
@@ -222,8 +223,8 @@ const HabitTrackerGame = () => {
     } catch (error) {
       console.error("Error loading data:", error);
       const defaultHabits = [
-        { id: 1, name: 'wake up 05:00 AM', emoji: "⏰", color: "bg-cyan-100" },
-        { id: 2, name: 'Gym', emoji: "💪", color: "bg-cyan-100" },
+        { id: 1, name: "wake up 05:00 AM", emoji: "⏰", color: "bg-cyan-100" },
+        { id: 2, name: "Gym", emoji: "💪", color: "bg-cyan-100" },
         {
           id: 3,
           name: "Stop Watching Porn",
@@ -490,37 +491,6 @@ const HabitTrackerGame = () => {
   const stats = calculateStats();
   const daysInMonth = getDaysInMonth(currentMonth);
 
-  // <button
-  //                 onClick={() => changeLanguage("uz")}
-  //                 className={`px-3 py-1 rounded text-xl hover:scale-110 active:scale-100 border border-black font-medium transition ${
-  //                   language === "uz"
-  //                     ? "bg-transparent text-black border border-black"
-  //                     : "text-white/70 hover:text-black"
-  //                 }`}
-  //               >
-  //                 🇺🇿 UZ
-  //               </button>
-  //               <button
-  //                 onClick={() => changeLanguage("ru")}
-  //                 className={`px-3 py-1 rounded text-xl hover:scale-110 active:scale-100 border border-black font-medium transition ${
-  //                   language === "ru"
-  //                     ? "bg-transparent text-black border border-black"
-  //                     : "text-white/70 hover:text-black"
-  //                 }`}
-  //               >
-  //                 🇷🇺 RU
-  //               </button>
-  //               <button
-  //                 onClick={() => changeLanguage("en")}
-  //                 className={`px-3 py-1 rounded text-xl hover:scale-110 active:scale-100 border border-black font-medium transition ${
-  //                   language === "en"
-  //                     ? "bg-transparent text-black border border-black"
-  //                     : "text-white/70 hover:text-black"
-  //                 }`}
-  //               >
-  //                 🇺🇸 ENG
-  //               </button>
-
   return (
     <div className="min-h-screen bg-white p-4">
       <div className="max-w-7xl mx-auto">
@@ -533,22 +503,106 @@ const HabitTrackerGame = () => {
             </h1>
             <div className="flex gap-2 flex-wrap items-center">
               <div className="relative">
-                <select
-                  value={language}
-                  onChange={(e) => changeLanguage(e.target.value)}
-                  className="appearance-none bg-black/20 hover:scale-110 text-white px-2 pr-10 rounded-lg border border-black/30 focus:outline-none focus:border-black/30 cursor-pointer font-medium text-2xl w-20 hover:bg-black/40 transition"
+                <button
+                  onClick={() => setShowLangMenu(!showLangMenu)}
+                  className="flex items-center w-25 justify-between bg-black/30 hover:bg-black/50 text-white px-5 py-1 rounded-lg font-medium transition shadow-lg"
                 >
-                  <option value="uz" className="">
-                    🇺🇿 Uz
-                  </option>
-                  <option value="ru" className="">
-                    🇷🇺 Ru
-                  </option>
-                  <option value="en" className="">
-                    🇺🇸 Eng
-                  </option>
-                </select>
-                <Globe className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60 pointer-events-none" />
+                  <span className="text-xl">
+                    {language === "uz" ? "🇺🇿" : language === "ru" ? "🇷🇺" : "🇬🇧"}
+                  </span>
+                  <svg
+                    className={`w-5 h-5 transition-transform ${
+                      showLangMenu ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+
+                {showLangMenu && (
+                  <div className="absolute top-13 z-1 left-0 bg-white rounded-2xl rounded-tl-none shadow-2xl overflow-hidden w-64 border border-gray-100">
+                    <button
+                      onClick={() => changeLanguage("uz")}
+                      className={`w-full flex items-center gap-3 px-5 py-2 hover:bg-gray-300 transition ${
+                        language === "uz" ? "bg-gray-300" : ""
+                      }`}
+                    >
+                      <span className="text-lg">🇺🇿</span>
+                      <span className="text-lg font-medium text-gray-800">
+                        O'zbekcha
+                      </span>
+                      {language === "uz" && (
+                        <svg
+                          className="w-6 h-6 ml-auto text-red-500"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      )}
+                    </button>
+                    <button
+                      onClick={() => changeLanguage("ru")}
+                      className={`w-full flex items-center gap-3 px-5 py-2 hover:bg-gray-300 transition border-t border-gray-100 ${
+                        language === "ru" ? "bg-gray-300" : ""
+                      }`}
+                    >
+                      <span className="text-lg">🇷🇺</span>
+                      <span className="text-lg font-medium text-gray-800">
+                        Русский
+                      </span>
+                      {language === "ru" && (
+                        <svg
+                          className="w-6 h-6 ml-auto text-red-500"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      )}
+                    </button>
+                    <button
+                      onClick={() => changeLanguage("en")}
+                      className={`w-full flex items-center gap-3 px-5 py-2 hover:bg-gray-300 transition border-t border-gray-100 ${
+                        language === "en" ? "bg-gray-300" : ""
+                      }`}
+                    >
+                      <span className="text-lg">🇬🇧</span>
+                      <span className="text-lg font-medium text-gray-800">
+                        English
+                      </span>
+                      {language === "en" && (
+                        <svg
+                          className="w-6 h-6 ml-auto text-red-500"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+                )}
               </div>
 
               <button
@@ -617,7 +671,7 @@ const HabitTrackerGame = () => {
 
         {view === "calendar" ? (
           <>
-            <div className="bg-black/30 backdrop-blur-lg p-6 border border-gray-500">
+            <div className="bg-black/30 backdrop-blur-lg z-0 p-6 border border-gray-500">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl sm:text-2xl font-bold text-black">
                   {t.myHabits}
@@ -693,7 +747,7 @@ const HabitTrackerGame = () => {
                               </div>
                             </tr>
                             <div className="text-black text-xs font-semibold">
-                              {date.getDate()}.{date.getMonth()}.
+                              {date.getDate()}.{date.getMonth() + 1}.
                               {date.getFullYear()}
                             </div>
                           </th>
@@ -776,41 +830,296 @@ const HabitTrackerGame = () => {
             </div>
           </>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {habits.map((habit) => {
-              const habitStats = getHabitStats(habit.id);
-              return (
-                <div
-                  key={habit.id}
-                  className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20"
-                >
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-3xl">{habit.emoji}</span>
-                    <div className="flex-1">
-                      <h3 className="text-white font-semibold">{habit.name}</h3>
-                      <p className="text-white/60 text-sm">
-                        {habitStats.completed} / {habitStats.total} kun
-                      </p>
-                    </div>
-                    <div className="text-2xl font-bold text-white">
-                      {habitStats.percentage}%
-                    </div>
-                  </div>
-                  <div className="bg-white/5 rounded-full h-3 overflow-hidden">
-                    <div
-                      className={`h-full transition-all duration-500 ${
-                        habitStats.percentage >= 70
-                          ? "bg-green-500"
-                          : habitStats.percentage >= 40
-                          ? "bg-yellow-500"
-                          : "bg-red-500"
-                      }`}
-                      style={{ width: `${habitStats.percentage}%` }}
+          <div className="space-y-6">
+            {/* Overall Progress Chart */}
+            <div className="bg-black/30 backdrop-blur-lg p-6 border border-gray-500">
+              <h3 className="text-xl font-bold text-black mb-4">
+                📊 Umumiy Progress
+              </h3>
+              <div className="bg-white/10 rounded-lg p-4">
+                <svg viewBox="0 0 800 300" className="w-full h-64">
+                  <defs>
+                    <linearGradient
+                      id="areaGradient"
+                      x1="0%"
+                      y1="0%"
+                      x2="0%"
+                      y2="100%"
+                    >
+                      <stop offset="0%" stopColor="#10b981" stopOpacity="0.8" />
+                      <stop
+                        offset="100%"
+                        stopColor="#10b981"
+                        stopOpacity="0.1"
+                      />
+                    </linearGradient>
+                  </defs>
+
+                  {/* Grid lines */}
+                  {[0, 25, 50, 75, 100].map((y) => (
+                    <line
+                      key={y}
+                      x1="50"
+                      y1={250 - y * 2}
+                      x2="750"
+                      y2={250 - y * 2}
+                      stroke="#d1d5db"
+                      strokeWidth="1"
+                      strokeDasharray="5,5"
+                      opacity="0.3"
                     />
+                  ))}
+
+                  {/* Area chart */}
+                  {(() => {
+                    const points = habits.map((habit, index) => {
+                      const habitStats = getHabitStats(habit.id);
+                      const x = 50 + index * (700 / (habits.length - 1 || 1));
+                      const y = 250 - habitStats.percentage * 2;
+                      return {
+                        x,
+                        y,
+                        percentage: habitStats.percentage,
+                        emoji: habit.emoji,
+                        name: habit.name,
+                      };
+                    });
+
+                    const pathData =
+                      points
+                        .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x},${p.y}`)
+                        .join(" ") +
+                      ` L ${points[points.length - 1].x},250 L 50,250 Z`;
+
+                    return (
+                      <>
+                        <path d={pathData} fill="url(#areaGradient)" />
+                        <path
+                          d={points
+                            .map(
+                              (p, i) => `${i === 0 ? "M" : "L"} ${p.x},${p.y}`
+                            )
+                            .join(" ")}
+                          fill="none"
+                          stroke="#10b981"
+                          strokeWidth="3"
+                        />
+                        {points.map((point, index) => (
+                          <g key={index}>
+                            <circle
+                              cx={point.x}
+                              cy={point.y}
+                              r="6"
+                              fill="#10b981"
+                              stroke="white"
+                              strokeWidth="2"
+                            />
+                            <text
+                              x={point.x}
+                              y={point.y - 15}
+                              textAnchor="middle"
+                              fontSize="12"
+                              fontWeight="bold"
+                              fill="#000"
+                            >
+                              {point.percentage}%
+                            </text>
+                            <text
+                              x={point.x}
+                              y="280"
+                              textAnchor="middle"
+                              fontSize="20"
+                            >
+                              {point.emoji}
+                            </text>
+                          </g>
+                        ))}
+                      </>
+                    );
+                  })()}
+
+                  {/* Y-axis labels */}
+                  {[0, 25, 50, 75, 100].map((y) => (
+                    <text
+                      key={y}
+                      x="35"
+                      y={255 - y * 2}
+                      textAnchor="end"
+                      fontSize="12"
+                      fill="#666"
+                    >
+                      {y}%
+                    </text>
+                  ))}
+                </svg>
+              </div>
+            </div>
+
+            {/* Best Performing Habits */}
+            <div className="bg-black/30 backdrop-blur-lg p-6 border border-gray-500">
+              <h3 className="text-xl font-bold text-black mb-4">
+                🏆 Eng Yaxshi Odatlar
+              </h3>
+              <div className="space-y-3">
+                {habits
+                  .map((habit) => ({
+                    ...habit,
+                    stats: getHabitStats(habit.id),
+                  }))
+                  .sort((a, b) => b.stats.percentage - a.stats.percentage)
+                  .slice(0, 5)
+                  .map((habit, index) => (
+                    <div
+                      key={habit.id}
+                      className="flex items-center gap-4 bg-white/10 rounded-lg p-4"
+                    >
+                      <span className="text-3xl font-bold text-black">
+                        #{index + 1}
+                      </span>
+                      <span className="text-3xl">{habit.emoji}</span>
+                      <div className="flex-1">
+                        <h4 className="text-black font-semibold">
+                          {habit.name}
+                        </h4>
+                        <div className="flex items-center gap-2 mt-1">
+                          <div className="flex-1 bg-white/20 rounded-full h-2">
+                            <div
+                              className={`h-full rounded-full transition-all duration-500 ${
+                                habit.stats.percentage >= 70
+                                  ? "bg-green-500"
+                                  : habit.stats.percentage >= 40
+                                  ? "bg-yellow-500"
+                                  : "bg-red-500"
+                              }`}
+                              style={{ width: `${habit.stats.percentage}%` }}
+                            />
+                          </div>
+                          <span className="text-sm font-bold text-black">
+                            {habit.stats.percentage}%
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            {/* Daily Completion Rate */}
+            <div className="bg-black/30 backdrop-blur-lg p-6 border border-gray-500">
+              <h3 className="text-xl font-bold text-black mb-4">
+                📅 Kunlik Bajarilish
+              </h3>
+              <div className="grid grid-cols-7 gap-2">
+                {Array.from({ length: daysInMonth }, (_, i) => {
+                  const day = i + 1;
+                  let dayCompleted = 0;
+                  habits.forEach((habit) => {
+                    const key = `${habit.id}-${day}`;
+                    if (completions[key]) dayCompleted++;
+                  });
+                  const dayPercentage =
+                    habits.length > 0
+                      ? Math.round((dayCompleted / habits.length) * 100)
+                      : 0;
+
+                  return (
+                    <div key={day} className="flex flex-col items-center gap-1">
+                      <div
+                        className={`w-full h-16 rounded-lg flex items-center justify-center font-bold text-xs transition-all ${
+                          dayPercentage >= 70
+                            ? "bg-green-500 text-black"
+                            : dayPercentage >= 40
+                            ? "bg-yellow-500 text-black"
+                            : dayPercentage === 0
+                            ? "bg-gray-300 text-gray-600"
+                            : "bg-red-500 text-black"
+                        }`}
+                      >
+                        {dayPercentage}%
+                      </div>
+                      <span className="text-xs text-black font-semibold">
+                        {day}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Weekly Summary */}
+            <div className="bg-black/30 backdrop-blur-lg p-6 border border-gray-500">
+              <h3 className="text-xl font-bold text-black mb-4">
+                📈 Haftalik Xulosa
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-green-500/20 border border-green-500 rounded-lg p-4">
+                  <div className="text-3xl mb-2">✅</div>
+                  <div className="text-2xl font-bold text-black">
+                    {stats.completed}
                   </div>
+                  <div className="text-sm text-gray-700">Bajarilgan</div>
                 </div>
-              );
-            })}
+                <div className="bg-blue-500/20 border border-blue-500 rounded-lg p-4">
+                  <div className="text-3xl mb-2">🎯</div>
+                  <div className="text-2xl font-bold text-black">
+                    {stats.total}
+                  </div>
+                  <div className="text-sm text-gray-700">Jami Vazifalar</div>
+                </div>
+                <div className="bg-yellow-500/20 border border-yellow-500 rounded-lg p-4">
+                  <div className="text-3xl mb-2">📊</div>
+                  <div className="text-2xl font-bold text-black">
+                    {stats.percentage}%
+                  </div>
+                  <div className="text-sm text-gray-700">Umumiy Progress</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Habit Details */}
+            <div className="bg-black/30 backdrop-blur-lg p-6 border border-gray-500">
+              <h3 className="text-xl font-bold text-black mb-4">
+                📋 Batafsil Ma'lumot
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {habits.map((habit) => {
+                  const habitStats = getHabitStats(habit.id);
+                  return (
+                    <div
+                      key={habit.id}
+                      className="bg-white/10 backdrop-blur-lg rounded-lg p-4 border border-gray-400"
+                    >
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="text-3xl">{habit.emoji}</span>
+                        <div className="flex-1">
+                          <h3 className="text-black font-semibold">
+                            {habit.name}
+                          </h3>
+                          <p className="text-gray-700 text-sm">
+                            {habitStats.completed} / {habitStats.total} kun
+                          </p>
+                        </div>
+                        <div className="text-xl font-bold text-black">
+                          {habitStats.percentage}%
+                        </div>
+                      </div>
+                      <div className="bg-white/20 rounded-full h-3 overflow-hidden">
+                        <div
+                          className={`h-full transition-all duration-500 ${
+                            habitStats.percentage >= 70
+                              ? "bg-green-500"
+                              : habitStats.percentage >= 40
+                              ? "bg-yellow-500"
+                              : "bg-red-500"
+                          }`}
+                          style={{ width: `${habitStats.percentage}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         )}
 
