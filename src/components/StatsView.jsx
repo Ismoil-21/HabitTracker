@@ -243,10 +243,10 @@ const StatsView = ({
                   <p className="text-sm text-gray-700">
                     {weekCompleted} / {weekTotal} {t.bajarilgan}
                   </p>
+                  <h3 className="text-lg font-bold text-black my-4">
+                    {t.kunlar}
+                  </h3>
                 </div>
-                <h3 className="text-lg font-bold text-black my-4">
-                  {t.kunlar}:
-                </h3>
                 <div className="mt-3 grid grid-cols-7 gap-1">
                   {Array.from(
                     { length: weekEnd - weekStart + 1 },
@@ -288,27 +288,28 @@ const StatsView = ({
       </div>
 
       {/* Weekly Summary */}
+      {/* Weekly Summary */}
       <div className="bg-black/10 backdrop-blur-lg p-6 rounded-3xl">
         <h3 className="text-xl font-bold text-black mb-4">{t.xulosa}</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-green-500/20 border border-green-500 rounded-lg p-4">
-            <div className="text-3xl mb-2">✅</div>
-            <div className="text-2xl font-bold text-black">
-              {stats.completed}
-            </div>
-            <div className="text-sm text-gray-700">{t.bajarilgan}</div>
-          </div>
           <div className="bg-blue-500/20 border border-blue-500 rounded-lg p-4">
             <div className="text-3xl mb-2">🎯</div>
             <div className="text-2xl font-bold text-black">{stats.total}</div>
             <div className="text-sm text-gray-700">{t.vazifa}</div>
           </div>
-          <div className="bg-yellow-500/20 border border-yellow-500 rounded-lg p-4">
-            <div className="text-3xl mb-2">📊</div>
+          <div className="bg-green-500/20 border border-green-500 rounded-lg p-4">
+            <div className="text-2xl mb-2">✅</div>
             <div className="text-2xl font-bold text-black">
-              {stats.percentage}%
+              {stats.completed}
             </div>
-            <div className="text-sm text-gray-700">{t.progress}</div>
+            <div className="text-sm text-gray-700">{t.bajarilgan}</div>
+          </div>
+          <div className="bg-red-500/20 border border-red-500 rounded-lg p-4">
+            <div className="text-2xl mb-2">❌</div>
+            <div className="text-2xl font-bold text-black">
+              {stats.total - stats.completed}
+            </div>
+            <div className="text-sm text-gray-700">{t.bajarilmagan}</div>
           </div>
         </div>
       </div>

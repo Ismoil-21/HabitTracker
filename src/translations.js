@@ -36,6 +36,7 @@ export const translations = {
     vazifa: "Jami Vazifalar",
     weeks: "-hafta",
     kunlar: "Kunlar",
+    bajarilmagan: "Bajarilmagan",
   },
   ru: {
     title: "Измените свою жизнь",
@@ -72,6 +73,7 @@ export const translations = {
     vazifa: "Всего заданий",
     weeks: "-неделя",
     kunlar: "Дни",
+    bajarilmagan: "Не выполнено",
   },
   en: {
     title: "Change your life",
@@ -108,5 +110,6 @@ export const translations = {
     vazifa: "Total tasks",
     weeks: "-week",
     kunlar: "Days",
+    bajarilmagan: "Not completed",
   },
 };

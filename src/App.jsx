@@ -89,28 +89,25 @@ const App = () => {
         const defaultHabits = [
           {
             id: 1,
-            name: "Проснуться в 05:00 утра",
-            emoji: "⏰",
-            color: "bg-cyan-100",
+            name: "Проснуться в 06:00 утра",
+            emoji: "⏰"
           },
-          { id: 2, name: "Тренировка", emoji: "💪", color: "bg-cyan-100" },
+          { id: 2, name: "Тренировка", emoji: "💪" },
           {
             id: 3,
             name: "Чтение / Обучение",
-            emoji: "📚",
-            color: "bg-cyan-100",
+            emoji: "📚"
           },
-          { id: 4, name: "Отслеживание бюджета", emoji: "💰", color: "bg-cyan-100" },
-          { id: 5, name: "Project Work", emoji: "🎯", color: "bg-cyan-100" },
-          { id: 6, name: "No Alcohol", emoji: "🥤", color: "bg-cyan-100" },
+          { id: 4, name: "Отслеживание бюджета", emoji: "💰"},
+          { id: 5, name: "Проектная работа", emoji: "🎯" },
+          { id: 6, name: "Без алкоголя", emoji: "🥤" },
           {
             id: 7,
             name: "Детокс от социальных сетей",
-            emoji: "🌿",
-            color: "bg-cyan-100",
+            emoji: "🌿"
           },
-          { id: 8, name: "Журналирование целей", emoji: "📝", color: "bg-cyan-100" },
-          { id: 9, name: "Холодный душ", emoji: "🚿", color: "bg-cyan-100" },
+          { id: 8, name: "Журналирование целей", emoji: "📝" },
+          { id: 9, name: "Холодный душ", emoji: "🚿"},
         ];
         setHabits(defaultHabits);
         localStorage.setItem(habitsKey, JSON.stringify(defaultHabits));
