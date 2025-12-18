@@ -53,6 +53,7 @@ const Header = ({
           >
             <TrendingUp className="w-5 h-5" />
           </button>
+
           <button
             onClick={onReset}
             className="px-4 py-2 rounded-lg font-medium hover:scale-110 active:scale-100 bg-red-500 text-red-300 transition"

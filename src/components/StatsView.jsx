@@ -243,10 +243,10 @@ const StatsView = ({
                   <p className="text-sm text-gray-700">
                     {weekCompleted} / {weekTotal} {t.bajarilgan}
                   </p>
-                  <h3 className="text-lg font-bold text-black my-4">
-                    {t.kunlar}
-                  </h3>
                 </div>
+                <h3 className="text-lg font-bold text-black my-4">
+                  {t.kunlar}:
+                </h3>
                 <div className="mt-3 grid grid-cols-7 gap-1">
                   {Array.from(
                     { length: weekEnd - weekStart + 1 },
@@ -329,7 +329,8 @@ const StatsView = ({
                   <div className="flex-1">
                     <h3 className="text-black font-semibold">{habit.name}</h3>
                     <p className="text-gray-700 text-sm">
-                      {habitStats.completed} / {habitStats.total} kun
+                      {habitStats.completed} / {habitStats.total}
+                      {t.kun}
                     </p>
                   </div>
                   <div className="text-xl font-bold text-black">

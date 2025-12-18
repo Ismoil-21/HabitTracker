@@ -1,14 +1,16 @@
 // App.jsx
 import React, { useState, useEffect } from "react";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { translations } from "./translations";
 import LoginPage from "./pages/LoginPage";
+import CalendarPage from "./pages/CalendarPage";
+import StatsPage from "./pages/StatsPage";
 import LoadingScreen from "./components/LoadingScreen";
-import Header from "./components/Header";
-import CalendarView from "./components/CalendarView";
-import StatsView from "./components/StatsView";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
-  const VALID_CODES = ["Ismoil_17", "initiative", "Oyatilloh8576"];
+  const VALID_CODES = ["admin_ismoil", "admin-mustafo", "admin-oyatillo"];
+  const navigate = useNavigate();
 
   const [language, setLanguage] = useState("uz");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -21,19 +23,19 @@ const App = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [showAddHabit, setShowAddHabit] = useState(false);
   const [newHabitName, setNewHabitName] = useState("");
-  const [view, setView] = useState("calendar");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [showLangMenu, setShowLangMenu] = useState(false);
 
   const t = translations[language];
 
   useEffect(() => {
     const savedUser = localStorage.getItem("currentUser");
     const savedLanguage = localStorage.getItem("language");
+
     if (savedLanguage) {
       setLanguage(savedLanguage);
     }
+
     if (savedUser && VALID_CODES.includes(savedUser)) {
       setCurrentUser(savedUser);
       setIsLoggedIn(true);
@@ -46,7 +48,6 @@ const App = () => {
   const changeLanguage = (lang) => {
     setLanguage(lang);
     localStorage.setItem("language", lang);
-    setShowLangMenu(false);
   };
 
   const handleLogin = () => {
@@ -58,8 +59,10 @@ const App = () => {
       loadData(code);
       setLoginError("");
       setLoginCode("");
+      return true;
     } else {
       setLoginError(t.loginError);
+      return false;
     }
   };
 
@@ -69,7 +72,8 @@ const App = () => {
       setCurrentUser("");
       localStorage.removeItem("currentUser");
       setHabits([]);
-      setCompletions({});
+      setCompletions([]);
+      navigate("/login");
     }
   };
 
@@ -89,7 +93,7 @@ const App = () => {
             emoji: "⏰",
             color: "bg-cyan-100",
           },
-          { id: 2, name: "тренировка", emoji: "💪", color: "bg-cyan-100" },
+          { id: 2, name: "Тренировка", emoji: "💪", color: "bg-cyan-100" },
           {
             id: 3,
             name: "Чтение / Обучение",
@@ -98,21 +102,15 @@ const App = () => {
           },
           { id: 4, name: "Отслеживание бюджета", emoji: "💰", color: "bg-cyan-100" },
           { id: 5, name: "Project Work", emoji: "🎯", color: "bg-cyan-100" },
+          { id: 6, name: "No Alcohol", emoji: "🥤", color: "bg-cyan-100" },
           {
-            id: 6,
-            name: "Хватит смотреть порно",
-            emoji: "💧",
-            color: "bg-cyan-100",
-          },
-          { id: 7, name: "Без алкоголя", emoji: "🥤", color: "bg-cyan-100" },
-          {
-            id: 8,
+            id: 7,
             name: "Детокс от социальных сетей",
             emoji: "🌿",
             color: "bg-cyan-100",
           },
-          { id: 9, name: "Журналирование целей", emoji: "📝", color: "bg-cyan-100" },
-          { id: 10, name: "Холодный душ", emoji: "🚿", color: "bg-cyan-100" },
+          { id: 8, name: "Журналирование целей", emoji: "📝", color: "bg-cyan-100" },
+          { id: 9, name: "Холодный душ", emoji: "🚿", color: "bg-cyan-100" },
         ];
         setHabits(defaultHabits);
         localStorage.setItem(habitsKey, JSON.stringify(defaultHabits));
@@ -243,78 +241,87 @@ const App = () => {
     }
   };
 
-  if (!isLoggedIn) {
-    return (
-      <LoginPage
-        language={language}
-        onLanguageChange={changeLanguage}
-        loginCode={loginCode}
-        setLoginCode={setLoginCode}
-        loginError={loginError}
-        setLoginError={setLoginError}
-        onLogin={handleLogin}
-        t={t}
-      />
-    );
-  }
-
   if (loading) {
     return <LoadingScreen t={t} />;
   }
 
-  const stats = calculateStats();
-  const daysInMonth = getDaysInMonth(currentMonth);
-
   return (
-    <div className="min-h-screen bg-white p-4">
-      <div className="max-w-7xl mx-auto">
-        <Header
-          t={t}
-          saving={saving}
-          language={language}
-          onLanguageChange={changeLanguage}
-          showLangMenu={showLangMenu}
-          setShowLangMenu={setShowLangMenu}
-          view={view}
-          setView={setView}
-          onReset={resetAllData}
-          onLogout={handleLogout}
-          currentUser={currentUser}
-          stats={stats}
-        />
-
-        {view === "calendar" ? (
-          <CalendarView
-            t={t}
-            habits={habits}
-            completions={completions}
-            daysInMonth={daysInMonth}
-            showAddHabit={showAddHabit}
-            setShowAddHabit={setShowAddHabit}
-            newHabitName={newHabitName}
-            setNewHabitName={setNewHabitName}
-            onAddHabit={addHabit}
-            onDeleteHabit={deleteHabit}
-            onToggleHabit={toggleHabit}
-            getHabitStats={getHabitStats}
-            saving={saving}
-          />
-        ) : (
-          <StatsView
-            t={t}
-            habits={habits}
-            completions={completions}
-            daysInMonth={daysInMonth}
-            getHabitStats={getHabitStats}
-            stats={stats}
-          />
-        )}
-
-        <div className="mt-6 bg-blue-500/60 border border-blue-500/20 rounded-lg p-4">
-          <p className="text-white text-lg text-center">{t.infoMessage}</p>
-        </div>
-      </div>
-    </div>
+    <Routes>
+      <Route
+        path="/login"
+        element={
+          isLoggedIn ? (
+            <Navigate to="/dashboard" replace />
+          ) : (
+            <LoginPage
+              language={language}
+              onLanguageChange={changeLanguage}
+              loginCode={loginCode}
+              setLoginCode={setLoginCode}
+              loginError={loginError}
+              setLoginError={setLoginError}
+              onLogin={handleLogin}
+              t={t}
+            />
+          )
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute isLoggedIn={isLoggedIn}>
+            <CalendarPage
+              language={language}
+              onLanguageChange={changeLanguage}
+              currentUser={currentUser}
+              habits={habits}
+              completions={completions}
+              currentMonth={currentMonth}
+              showAddHabit={showAddHabit}
+              setShowAddHabit={setShowAddHabit}
+              newHabitName={newHabitName}
+              setNewHabitName={setNewHabitName}
+              onAddHabit={addHabit}
+              onDeleteHabit={deleteHabit}
+              onToggleHabit={toggleHabit}
+              getHabitStats={getHabitStats}
+              calculateStats={calculateStats}
+              getDaysInMonth={getDaysInMonth}
+              onReset={resetAllData}
+              onLogout={handleLogout}
+              saving={saving}
+              t={t}
+            />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/stats"
+        element={
+          <ProtectedRoute isLoggedIn={isLoggedIn}>
+            <StatsPage
+              language={language}
+              onLanguageChange={changeLanguage}
+              currentUser={currentUser}
+              habits={habits}
+              completions={completions}
+              currentMonth={currentMonth}
+              getHabitStats={getHabitStats}
+              calculateStats={calculateStats}
+              getDaysInMonth={getDaysInMonth}
+              onReset={resetAllData}
+              onLogout={handleLogout}
+              saving={saving}
+              t={t}
+            />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="*"
+        element={<Navigate to={isLoggedIn ? "/dashboard" : "/login"} replace />}
+      />
+    </Routes>
   );
 };
 

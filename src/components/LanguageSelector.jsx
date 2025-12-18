@@ -7,6 +7,11 @@ const LanguageSelector = ({
   showMenu,
   setShowMenu,
 }) => {
+  const handleLanguageSelect = (lang) => {
+    onLanguageChange(lang);
+    setShowMenu(false); // Menuni yopish
+  };
+
   return (
     <div className="relative">
       <button
@@ -34,9 +39,9 @@ const LanguageSelector = ({
       </button>
 
       {showMenu && (
-        <div className="absolute top-13 z-1 left-0 bg-white rounded-2xl rounded-tl-none shadow-2xl overflow-hidden w-64 border border-gray-100">
+        <div className="absolute top-13 z-10 left-0 bg-white rounded-2xl rounded-tl-none shadow-2xl overflow-hidden w-64 border border-gray-100">
           <button
-            onClick={() => onLanguageChange("uz")}
+            onClick={() => handleLanguageSelect("uz")}
             className={`w-full flex items-center gap-3 px-5 py-2 hover:bg-gray-300 transition ${
               language === "uz" ? "bg-gray-300" : ""
             }`}
@@ -58,7 +63,7 @@ const LanguageSelector = ({
             )}
           </button>
           <button
-            onClick={() => onLanguageChange("ru")}
+            onClick={() => handleLanguageSelect("ru")}
             className={`w-full flex items-center gap-3 px-5 py-2 hover:bg-gray-300 transition border-t border-gray-100 ${
               language === "ru" ? "bg-gray-300" : ""
             }`}
@@ -80,7 +85,7 @@ const LanguageSelector = ({
             )}
           </button>
           <button
-            onClick={() => onLanguageChange("en")}
+            onClick={() => handleLanguageSelect("en")}
             className={`w-full flex items-center gap-3 px-5 py-2 hover:bg-gray-300 transition border-t border-gray-100 ${
               language === "en" ? "bg-gray-300" : ""
             }`}
