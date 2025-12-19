@@ -9,7 +9,7 @@ import LoadingScreen from "./components/LoadingScreen";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
-  const VALID_CODES = ["admin_ismoil", "admin-mustafo", "admin-oyatillo"];
+  const VALID_CODES = ["admin_ismoil", "admin-mustafo", "admin-oyatillo", "toxir"];
   const navigate = useNavigate();
 
   const [language, setLanguage] = useState("uz");
