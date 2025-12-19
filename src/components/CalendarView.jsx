@@ -18,7 +18,7 @@ const CalendarView = ({
   saving,
 }) => {
   return (
-    <div className="bg-black/10 backdrop-blur-lg z-0 p-6 border border-white/5 rounded-3xl animate-fade-in">
+    <div className="bg-black/10 backdrop-blur-lg -z-1 p-6 border border-white/5 rounded-3xl animate-fade-in">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl sm:text-2xl font-bold text-black">
           {t.myHabits}
