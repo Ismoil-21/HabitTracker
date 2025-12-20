@@ -13,6 +13,8 @@ const LoginPage = ({
   onLogin,
   t,
 }) => {
+
+  
   return (
     <div
       className="flex items-center px-10 justify-center bg-black"
@@ -25,7 +27,7 @@ const LoginPage = ({
     >
       <Galaxy />
       <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="bg-white/10 absolute backdrop-blur-lg rounded-3xl p-8 border border-white/20 w-90 sm:w-100">
+        <div className="bg-white/10 absolute backdrop-blur-lg rounded-3xl p-8 border border-white/20 w-85 sm:w-100">
           <div className="flex justify-center gap-2 mb-6">
             <button
               onClick={() => onLanguageChange("uz")}

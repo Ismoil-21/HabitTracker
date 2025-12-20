@@ -9,7 +9,12 @@ import LoadingScreen from "./components/LoadingScreen";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
-  const VALID_CODES = ["admin_ismoil", "admin-mustafo", "admin-oyatillo", "toxir"];
+  const VALID_CODES = [
+    "admin_ismoil",
+    "admin-mustafo",
+    "admin-oyatillo",
+    "toxir",
+  ];
   const navigate = useNavigate();
 
   const [language, setLanguage] = useState("uz");
@@ -90,24 +95,24 @@ const App = () => {
           {
             id: 1,
             name: "Проснуться в 06:00 утра",
-            emoji: "⏰"
+            emoji: "⏰",
           },
           { id: 2, name: "Тренировка", emoji: "💪" },
           {
             id: 3,
             name: "Чтение / Обучение",
-            emoji: "📚"
+            emoji: "📚",
           },
-          { id: 4, name: "Отслеживание бюджета", emoji: "💰"},
+          { id: 4, name: "Отслеживание бюджета", emoji: "💰" },
           { id: 5, name: "Проектная работа", emoji: "🎯" },
           { id: 6, name: "Без алкоголя", emoji: "🥤" },
           {
             id: 7,
             name: "Детокс от социальных сетей",
-            emoji: "🌿"
+            emoji: "🌿",
           },
           { id: 8, name: "Журналирование целей", emoji: "📝" },
-          { id: 9, name: "Холодный душ", emoji: "🚿"},
+          { id: 9, name: "Холодный душ", emoji: "🚿" },
         ];
         setHabits(defaultHabits);
         localStorage.setItem(habitsKey, JSON.stringify(defaultHabits));
@@ -118,10 +123,15 @@ const App = () => {
       if (savedCompletions) {
         setCompletions(JSON.parse(savedCompletions));
       }
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 4000);
     } catch (error) {
       console.error("Error loading data:", error);
-    } finally {
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 4000);
     }
   };
 
