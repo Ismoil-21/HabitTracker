@@ -365,7 +365,6 @@ const StatsView = ({
             </div>
           </div>
 
-          {/* Habit Details */}
           <div className="bg-black/10 backdrop-blur-lg p-6 rounded-3xl">
             <h3 className="text-xl font-bold text-black mb-4">
               {t.habitDetails || "Odatlar tafsiloti"}
