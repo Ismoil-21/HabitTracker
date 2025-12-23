@@ -1,0 +1,30 @@
+{
+  "users": {
+    "admin-oyatilloh": {
+      "id": "user_1766487228417",
+      "code": "admin-oyatilloh",
+      "username": "Oyatilloh",
+      "password": "Oyatillo200828",
+      "language": "uz",
+      "isAdmin": false,
+      "createdAt": "2025-12-23T10:53:48.417Z"
+    },
+    "admin-mustafo": {
+      "id": "user_1766487263257",
+      "code": "admin-mustafo",
+      "username": "Mustafo",
+      "password": "Mustafo200807",
+      "language": "uz",
+      "isAdmin": false,
+      "createdAt": "2025-12-23T10:54:23.257Z"
+    }
+  },
+  "habits": {
+    "admin-oyatilloh": [],
+    "admin-mustafo": []
+  },
+  "completions": {
+    "admin-oyatilloh": {},
+    "admin-mustafo": {}
+  }
+}

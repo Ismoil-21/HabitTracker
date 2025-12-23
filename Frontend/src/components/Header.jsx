@@ -120,10 +120,10 @@ const Header = ({
           <button
             data-menu-button
             onClick={() => setShowMobileMenu(!showMobileMenu)}
-            className="md:hidden p-2 rounded-lg border border-black text-black hover:bg-black/5 transition"
+            className="md:hidden p-2 rounded-lg text-black hover:bg-black/5 transition"
             aria-label="Menu"
           >
-            <Menu className="w-3 h-3 sm:w-4 sm:h-4 md:w-6 md:h-6" />
+            <Menu className="w-5 h-5 md:w-6 md:h-6" />
           </button>
         </div>
       </div>

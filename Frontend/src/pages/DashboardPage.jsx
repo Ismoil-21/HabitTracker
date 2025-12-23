@@ -41,7 +41,7 @@ const DashboardPage = ({
 
   return (
     <div className="min-h-screen bg-white p-4 animate-fade-in">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto flex flex-col">
         <Header
           t={t}
           saving={saving}
